@@ -1,8 +1,10 @@
 package werkzeuge.stage;
 
 import fechten.Tunier;
+import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import service.TunierService;
+import werkzeuge.ActionListener;
 import werkzeuge.fechter.FechterWerkzeug;
 import werkzeuge.gruppen.GruppenWerkzeug;
 import werkzeuge.menubar.MenuBarWerkzeug;
@@ -33,6 +35,25 @@ public class StageWerkzeug
 		
 		_tabmenuWerkzeug.setupTabs(_tableauWerkzeug.getTab(), _fechterWerkzeug.getTab(), _gruppenWerkzeug.getTab());
 		_ui.setupStage(_menuBarWerkzeug.getMenu(), _tabmenuWerkzeug.getTabPane());
+		
+		registriereMenubarWerkzeug();
+	}
+	
+	
+	private void registriereMenubarWerkzeug()
+	{
+		_menuBarWerkzeug.addListener(new ActionListener()
+		{
+			
+			@Override
+			public void handle(ActionEvent event)
+			{
+				if(event.getSource().equals("Loeschen"))
+				{
+					_fechterWerkzeug.loescheAusgewaehlteFechter();
+				}
+			}
+		});
 	}
 	
 	

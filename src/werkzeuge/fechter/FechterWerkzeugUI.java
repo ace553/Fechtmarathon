@@ -21,8 +21,6 @@ class FechterWerkzeugUI
 {
 	final Tab _tab;
 
-	final Button _loeschenButton;
-
 	final TableView<Fechter> _table;
 	final TableColumn<Fechter, String> _colVornamen;
 	final TableColumn<Fechter, String> _colNachnamen;
@@ -40,8 +38,6 @@ class FechterWerkzeugUI
 	{
 		_tab = new Tab("Teilnehmer");
 
-		_loeschenButton = new Button("Löschen");
-		_loeschenButton.setDisable(true);
 		_table = new TableView<Fechter>();
 
 		
@@ -124,10 +120,6 @@ class FechterWerkzeugUI
 		_verein.setMaxWidth(_colVerein.getPrefWidth());
 		_verein.setPromptText("Verein");
 
-		final BorderPane buttonLayout = new BorderPane();
-		buttonLayout.setPadding(new Insets(0, 10, 5, 0));
-		buttonLayout.setRight(_loeschenButton);
-
 		final HBox meldeBox = new HBox();
 		meldeBox.setSpacing(3);
 		meldeBox.setPadding(new Insets(10, 0, 10, 10));
@@ -136,8 +128,8 @@ class FechterWerkzeugUI
 
 		final VBox vbox = new VBox();
 		vbox.setSpacing(0);
-		vbox.setPadding(new Insets(10, 0, 0, 10));
-		vbox.getChildren().addAll(buttonLayout, _table, meldeBox);
+		vbox.setPadding(new Insets(10, 0, 0, 0));
+		vbox.getChildren().addAll(_table, meldeBox);
 
 		_tab.setContent(vbox);
 	}

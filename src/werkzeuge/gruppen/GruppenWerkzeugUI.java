@@ -8,8 +8,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 class GruppenWerkzeugUI
@@ -35,9 +38,14 @@ class GruppenWerkzeugUI
 	private void erstelleTab()
 	{
 		_tab.setClosable(false);
+		ScrollPane scroll = new ScrollPane();
+		
+		scroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
 		VBox box = new VBox();
+		scroll.setContent(_pane);
 		box.setPadding(new Insets(10, 10, 10, 10));
-		box.getChildren().add(_pane);
+		box.getChildren().add(scroll);
 		_tab.setContent(box);
 	}
 	

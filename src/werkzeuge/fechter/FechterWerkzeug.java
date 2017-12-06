@@ -36,42 +36,20 @@ public class FechterWerkzeug
 		registriereMeldenButton();
 		registriereDragAndDropListener();
 		registriereTunierService();
-		registriereTableViewSelection();
-		registriereLoeschenButton();
 	}
 	
 	public Tab getTab()
 	{
 		return _ui._tab;
 	}
-	
-	private void registriereTableViewSelection()
-	{
-		_ui._table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-		    if (newSelection != null) {
-		    	_ui._loeschenButton.setDisable(false);
-		    }
-		    else
-		    {
-		    	_ui._loeschenButton.setDisable(true);
-		    }
-		});
-	}
-	
-	private void registriereLoeschenButton()
-	{
-		_ui._loeschenButton.setOnAction(new EventHandler<ActionEvent>()
-		{
 
-			@Override
-			public void handle(ActionEvent event)
-			{
-				for(Fechter f: _ui._table.getSelectionModel().getSelectedItems())
-				{
-					_tunier.loesche(f);
-				}
-			}
-		});
+	
+	public void loescheAusgewaehlteFechter()
+	{
+		for(Fechter f: _ui._table.getSelectionModel().getSelectedItems())
+		{
+			_tunier.loesche(f);
+		}
 	}
 	private void registriereMeldenButton()
 	{

@@ -17,7 +17,7 @@ public class GruppenWerkzeug
 		_tunier = tunier;
 		
 		_ui._fechterTable.getTable().setItems(_tunier.getKeineGruppe());
-		for(int i = 0; i < 10; i++)
+		for(int i = 0; i < 30; i++)
 		{
 			registriereNeueGruppe();
 		}

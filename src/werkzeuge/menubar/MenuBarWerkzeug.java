@@ -2,6 +2,8 @@ package werkzeuge.menubar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,14 +11,17 @@ import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import service.TunierService;
+import werkzeuge.ActionListener;
+import werkzeuge.ObservableAction;
 
-public class MenuBarWerkzeug
+public class MenuBarWerkzeug implements ObservableAction
 {
 	private MenuBarWerkzeugUI _ui;
 	private TunierService _tunier;
 	private File _file;
 	private ExtensionFilter _filter;
 	
+	private List<ActionListener> _listeners;
 	
 	
 	public MenuBarWerkzeug(TunierService tunier)
@@ -25,9 +30,12 @@ public class MenuBarWerkzeug
 		_tunier = tunier;
 		_file = null;
 		_filter = new ExtensionFilter("Tunier Datei", "*.tunier");
+		
+		_listeners = new ArrayList<>();
 		registriereSpeichern();
 		registriereSpeichernUnter();
 		registriereOeffnen();
+		registriereLoeschen();
 	}
 	
 	public MenuBar getMenu()
@@ -70,6 +78,19 @@ public class MenuBarWerkzeug
 					return;
 				}
 				_tunier.speichern(f);
+			}
+		});
+	}
+	
+	private void registriereLoeschen()
+	{
+		_ui._delete.setOnAction(new EventHandler<ActionEvent>()
+		{
+
+			@Override
+			public void handle(ActionEvent event)
+			{
+				notifyListeners(new ActionEvent("Loeschen", null));
 			}
 		});
 	}
@@ -145,5 +166,28 @@ public class MenuBarWerkzeug
 			}
 		}
 		return selected;
+	}
+
+	@Override
+	public void addListener(ActionListener listener)
+	{
+		_listeners.add(listener);
+		
+	}
+
+	@Override
+	public void removeListener(ActionListener listener)
+	{
+		_listeners.remove(listener);
+	}
+
+	@Override
+	public void notifyListeners(ActionEvent event)
+	{
+		for(ActionListener lis : _listeners)
+		{
+			lis.handle(event);
+		}
+		
 	}
 }
