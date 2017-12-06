@@ -1,4 +1,4 @@
-package werkzeuge.teilnehmer;
+package werkzeuge.fechter;
 
 import fechten.Fechter;
 import javafx.beans.InvalidationListener;
@@ -16,21 +16,21 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import service.TunierService;
 
-public class TeilnehmerWerkzeug
+public class FechterWerkzeug
 {
 
 	private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 	
 	
-	private final TeilnehmerWerkzeugUI _ui;
+	private final FechterWerkzeugUI _ui;
 	
 	private TunierService _tunier;
 	
-	public TeilnehmerWerkzeug(TunierService tunier)
+	public FechterWerkzeug(TunierService tunier)
 	{
 		_tunier = tunier;
 		
-		_ui = new TeilnehmerWerkzeugUI();
+		_ui = new FechterWerkzeugUI();
 		_ui._table.setItems(_tunier.getFechter());
 		registriereTableChange();
 		registriereMeldenButton();

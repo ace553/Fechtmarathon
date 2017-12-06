@@ -15,16 +15,16 @@ import javafx.scene.layout.VBox;
 class GruppenWerkzeugUI
 {
 	final Tab _tab;
-	final FechterTable _fechterTable;
+	final GruppenTable _fechterTable;
 
-	final List<FechterTable> _gruppen;
+	final List<GruppenTable> _gruppen;
 	
 	final FlowPane _pane;
 	
 	GruppenWerkzeugUI()
 	{
 		_tab = new Tab("Gruppen");
-		_gruppen = new ArrayList<FechterTable>();
+		_gruppen = new ArrayList<GruppenTable>();
 		_pane = new FlowPane();
 		_pane.setHgap(50);
 		_pane.setVgap(10);
@@ -42,9 +42,9 @@ class GruppenWerkzeugUI
 	}
 	
 	
-	public FechterTable newTable(StringProperty title, ObservableList<Fechter> data, boolean closeable)
+	public GruppenTable newTable(StringProperty title, ObservableList<Fechter> data, boolean closeable)
 	{
-		FechterTable table = new FechterTable(title, closeable);
+		GruppenTable table = new GruppenTable(title, closeable);
 		table.getTable().setItems(data);
 		_pane.getChildren().add(table);
 		_gruppen.add(table);

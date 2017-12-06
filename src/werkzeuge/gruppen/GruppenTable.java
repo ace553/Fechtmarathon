@@ -13,7 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class FechterTable extends VBox
+public class GruppenTable extends VBox
 {
 	private final TableView<Fechter> _table;
 	private final Button _closeButton;
@@ -21,7 +21,7 @@ public class FechterTable extends VBox
 	private final StringProperty _titProp;
 	
 	@SuppressWarnings("unchecked")
-	public FechterTable(StringProperty title, boolean closeable)
+	public GruppenTable(StringProperty title, boolean closeable)
 	{
 		_titProp = title;
 		_table = new TableView<>();

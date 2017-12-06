@@ -1,4 +1,4 @@
-package werkzeuge.teilnehmer;
+package werkzeuge.fechter;
 
 import fechten.Fechter;
 import javafx.geometry.Insets;
@@ -17,7 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-class TeilnehmerWerkzeugUI
+class FechterWerkzeugUI
 {
 	final Tab _tab;
 
@@ -36,7 +36,7 @@ class TeilnehmerWerkzeugUI
 	final TextField _verein;
 	final Button _meldenButton;
 
-	TeilnehmerWerkzeugUI()
+	FechterWerkzeugUI()
 	{
 		_tab = new Tab("Teilnehmer");
 
