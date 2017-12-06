@@ -51,6 +51,10 @@ public class TeilnehmerWerkzeug
 		    if (newSelection != null) {
 		    	_ui._loeschenButton.setDisable(false);
 		    }
+		    else
+		    {
+		    	_ui._loeschenButton.setDisable(true);
+		    }
 		});
 	}
 	
@@ -84,11 +88,6 @@ public class TeilnehmerWerkzeug
 				_ui._verein.clear();
 			}
 		});
-	}
-	
-	private void starteTunier()
-	{
-		_ui._colID.setSortable(true);
 	}
 	
 	private void registriereTunierService()

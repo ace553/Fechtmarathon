@@ -5,7 +5,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
 
-public class MenuBarWerkzeugUI
+class MenuBarWerkzeugUI
 {
 	final MenuBar _menu;
 	final Menu _fileMenu;

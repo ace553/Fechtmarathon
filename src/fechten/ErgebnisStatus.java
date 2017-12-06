@@ -1,6 +1,6 @@
 package fechten;
 
-public enum Ergebniszustand
+public enum ErgebnisStatus
 {
 	AUSSTEHEND, GEFOCHTEN, UNGUELTIG;
 }

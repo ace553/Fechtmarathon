@@ -12,10 +12,11 @@ import service.TunierService;
 
 public class MenuBarWerkzeug
 {
-	MenuBarWerkzeugUI _ui;
-	TunierService _tunier;
-	File _file;
-	ExtensionFilter _filter;
+	private MenuBarWerkzeugUI _ui;
+	private TunierService _tunier;
+	private File _file;
+	private ExtensionFilter _filter;
+	
 	
 	
 	public MenuBarWerkzeug(TunierService tunier)
@@ -101,15 +102,11 @@ public class MenuBarWerkzeug
 					return;
 				}
 				
-
-				System.out.println("Vor dem laden");
 				if(selected.exists())
 				{
 					_tunier.ladeTunier(selected);
 					_file = selected;
 				}
-
-				System.out.println("Nach: geladen");
 			}
 		});
 	}

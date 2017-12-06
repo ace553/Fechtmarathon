@@ -4,21 +4,30 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import service.TunierService;
+
 public class TableauTest
 {
 
-	Tableau tablo;
+	Tableau tableau;
 
-	Tunier t;
+	TunierService t;
+	
+	Tunier tunier;
 
 	public TableauTest()
 	{
-		tablo = new Tableau(10, 5);
-		t = new Tunier();
+		tunier = new Tunier();
+		
+		t = new TunierService(tunier);
 		for (int i = 0; i < 10; i++)
 		{
-			t.melde(new Fechter("A", "A", "A"));
+			Fechter f = new Fechter("A", "A", "A");
+			f.setzteAnwesend(true);
+			t.melde(f);
 		}
+		t.starte();
+		tableau = tunier.getTableau();
 	}
 
 	@Test
@@ -28,50 +37,53 @@ public class TableauTest
 		{
 			for (int k = 0; k < 10; k++)
 			{
-				Ergebnis e = tablo.getErgebnis(t.getFechter().get(i),
-				        t.getFechter().get(k));
+				Ergebnis e = tableau.getErgebnis(t.getTeilnehmer().get(i),
+				        t.getTeilnehmer().get(k));
 				if (i == k)
 				{
-					assertEquals(Ergebniszustand.UNGUELTIG, e.getZustand());
+					assertEquals(ErgebnisStatus.UNGUELTIG, e.getZustand());
 				} else
 				{
-					assertEquals(Ergebniszustand.AUSSTEHEND, e.getZustand());
+					assertEquals(ErgebnisStatus.AUSSTEHEND, e.getZustand());
 				}
 			}
 		}
 
 		for (int i = 0; i < 10; i++)
 		{
-			assertEquals(0, tablo.getErhalten(t.getFechter().get(i)));
-			assertEquals(0, tablo.getGewonnen(t.getFechter().get(i)));
-			assertEquals(0, tablo.getGefochten(t.getFechter().get(i)));
-			assertEquals(0, tablo.getGegeben(t.getFechter().get(i)));
+			assertEquals(0, tableau.erhaltenProperty(i).get());
+			assertEquals(0, tableau.gewonnenProperty(i).get());
+			assertEquals(0, tableau.gefochtenProperty(i).get());
+			assertEquals(0, tableau.gegebenProperty(i).get());
 		}
 	}
 	
 	@Test
 	public void testGefechtEintragen()
 	{
-		tablo.gefechtEintragen(t.getFechter().get(0), t.getFechter().get(1), 5, 3, true);
+		tableau.gefechtEintragen(t.getTeilnehmer().get(0), t.getTeilnehmer().get(1), 5, 3, true);
 
-		tablo.gefechtEintragen(t.getFechter().get(2), t.getFechter().get(1), 5, 3, true);
+		tableau.gefechtEintragen(t.getTeilnehmer().get(2), t.getTeilnehmer().get(1), 5, 3, true);
 
-		tablo.gefechtEintragen(t.getFechter().get(2), t.getFechter().get(0), 5, 3, true);
+		tableau.gefechtEintragen(t.getTeilnehmer().get(2), t.getTeilnehmer().get(0), 5, 3, true);
 		
-		assertEquals(2, tablo.getGefochten(t.getFechter().get(0)));
-		assertEquals(1, tablo.getGewonnen(t.getFechter().get(0)));
-		assertEquals(8, tablo.getErhalten(t.getFechter().get(0)));
-		assertEquals(8, tablo.getGegeben(t.getFechter().get(0)));
+		assertEquals(2, tableau.gefochtenProperty(0).get());
+		assertEquals(1, tableau.gewonnenProperty(0).get());
+		assertEquals(8, tableau.erhaltenProperty(0).get());
+		assertEquals(8, tableau.gegebenProperty(0).get());
+		assertEquals(0, tableau.indexProperty(0).get());
 		
-		assertEquals(2, tablo.getGefochten(t.getFechter().get(1)));
-		assertEquals(0, tablo.getGewonnen(t.getFechter().get(1)));
-		assertEquals(10, tablo.getErhalten(t.getFechter().get(1)));
-		assertEquals(6, tablo.getGegeben(t.getFechter().get(1)));
+		assertEquals(2, tableau.gefochtenProperty(1).get());
+		assertEquals(0, tableau.gewonnenProperty(1).get());
+		assertEquals(10, tableau.erhaltenProperty(1).get());
+		assertEquals(6, tableau.gegebenProperty(1).get());
+		assertEquals(-4, tableau.indexProperty(1).get());
 		
-		assertEquals(2, tablo.getGefochten(t.getFechter().get(2)));
-		assertEquals(2, tablo.getGewonnen(t.getFechter().get(2)));
-		assertEquals(6, tablo.getErhalten(t.getFechter().get(2)));
-		assertEquals(10, tablo.getGegeben(t.getFechter().get(2)));
+		assertEquals(2, tableau.gefochtenProperty(2).get());
+		assertEquals(2, tableau.gewonnenProperty(2).get());
+		assertEquals(6, tableau.erhaltenProperty(2).get());
+		assertEquals(10, tableau.gegebenProperty(2).get());
+		assertEquals(4, tableau.indexProperty(2).get());
 	}
 
 }

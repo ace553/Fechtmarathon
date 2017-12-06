@@ -1,6 +1,6 @@
 package fechten;
 
-import static fechten.Ergebniszustand.*;
+import static fechten.ErgebnisStatus.*;
 
 import javafx.beans.property.SimpleStringProperty;
 
@@ -13,11 +13,11 @@ public class Ergebnis
 	private int _treffer;
 	private boolean _gewonnen;
 
-	private Ergebniszustand _zustand;
+	private ErgebnisStatus _zustand;
 
 	private Tableau _tablo;
 
-	public Ergebnis(Ergebniszustand startzustand, int maxTreffer, Tableau tablo)
+	public Ergebnis(ErgebnisStatus startzustand, int maxTreffer, Tableau tablo)
 	{
 		_styled = new SimpleStringProperty();
 		_zustand = startzustand;
@@ -33,7 +33,7 @@ public class Ergebnis
 		return _tablo;
 	}
 
-	public Ergebniszustand getZustand()
+	public ErgebnisStatus getZustand()
 	{
 		return _zustand;
 	}
@@ -67,7 +67,7 @@ public class Ergebnis
 
 		StringBuilder b = new StringBuilder();
 
-		if (_zustand == Ergebniszustand.GEFOCHTEN)
+		if (_zustand == ErgebnisStatus.GEFOCHTEN)
 		{
 			if (_gewonnen)
 			{
@@ -81,7 +81,7 @@ public class Ergebnis
 				b.append(_treffer);
 			}
 		}
-		else if(_zustand == Ergebniszustand.UNGUELTIG)
+		else if(_zustand == ErgebnisStatus.UNGUELTIG)
 		{
 			b.append("O");
 		}

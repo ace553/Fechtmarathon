@@ -11,7 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
-public class TableauWerkzeugUI
+class TableauWerkzeugUI
 {
 	final Tab _tab;
 
@@ -23,7 +23,7 @@ public class TableauWerkzeugUI
 	final TableColumn<Teilnehmer, String> _colNamen;
 	
 
-	public TableauWerkzeugUI()
+	TableauWerkzeugUI()
 	{
 		_tab = new Tab("Tableau");
 		_startTunierButton = new Button("Starte Tunier");
@@ -60,8 +60,11 @@ public class TableauWerkzeugUI
 		VBox vbox = new VBox();
 		_colNamen.setCellValueFactory(
 		        new PropertyValueFactory<Teilnehmer, String>("name"));
+		_colNamen.setSortable(false);
+		
 		_colID.setCellValueFactory(
 		        new PropertyValueFactory<Teilnehmer, Integer>("id"));
+		_colID.setSortable(false);
 		
 		_tableauView.getColumns().addAll(_colID,_colNamen);
 		vbox.getChildren().add(_tableauView);

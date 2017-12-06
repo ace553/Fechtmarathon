@@ -1,12 +1,10 @@
 package fechten;
 
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Fechter
 {
-	private static final int UNGUELTIGE_ID = -1;
 	private final SimpleStringProperty _vorname;
 	private final SimpleStringProperty _nachname;
 	private final SimpleStringProperty _verein;
@@ -14,9 +12,8 @@ public class Fechter
 	private final SimpleBooleanProperty _anwesend;
 	private final SimpleStringProperty _name;
 	
-	private Tunier _tunier;
-
-	private final SimpleIntegerProperty _id;
+	private final SimpleStringProperty _gruppe;
+	
 
 	public Fechter(String vorname, String nachname, String verein)
 	{
@@ -25,50 +22,9 @@ public class Fechter
 		_verein = new SimpleStringProperty(verein);
 		_gestrichen = new SimpleBooleanProperty(false);
 		_anwesend = new SimpleBooleanProperty(false);
+		_gruppe = new SimpleStringProperty("-");
 		
 		_name = new SimpleStringProperty(vorname+" "+nachname);
-		_tunier = null;
-		_id = new SimpleIntegerProperty(UNGUELTIGE_ID);
-	}
-	
-	
-
-	public int anzahlGefochten()
-	{
-		assert _id.get() != UNGUELTIGE_ID : "ID ist ungueltig";
-
-		return _tunier.getTableau().getGefochten(this);
-	}
-
-	public int anzahlGewonnen()
-	{
-		assert _id.get() != UNGUELTIGE_ID : "ID ist ungueltig";
-
-		return _tunier.getTableau().getGewonnen(this);
-	}
-
-	public int erhaltendeTreffer()
-	{
-		assert _id.get() != UNGUELTIGE_ID : "ID ist ungueltig";
-		return _tunier.getTableau().getErhalten(this);
-
-	}
-
-	public int gegebeneTreffer()
-	{
-		assert _id.get() != UNGUELTIGE_ID : "ID ist ungueltig";
-
-		return _tunier.getTableau().getGegeben(this);
-	}
-
-	public int index()
-	{
-		return gegebeneTreffer() - erhaltendeTreffer();
-	}
-
-	public int getID()
-	{
-		return _id.get() - 1;
 	}
 
 	public void setzteAnwesend(boolean anwesend)
@@ -101,10 +57,11 @@ public class Fechter
 		return _nachname.get();
 	}
 
-	public void setzeID(int id)
+	public String getVerein()
 	{
-		_id.set(id+1);
+		return _verein.get();
 	}
+
 	
 	public SimpleStringProperty vornameProperty()
 	{
@@ -131,20 +88,13 @@ public class Fechter
 		return _gestrichen;
 	}
 	
-	public SimpleIntegerProperty idProperty()
-	{
-		return _id;
-	}
-	
 	public SimpleStringProperty nameProperty()
 	{
 		return _name;
 	}
 
-
-
-	public String getVerein()
+	public SimpleStringProperty gruppeProperty()
 	{
-		return _verein.get();
+		return _gruppe;
 	}
 }

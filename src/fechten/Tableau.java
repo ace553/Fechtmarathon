@@ -1,144 +1,159 @@
 package fechten;
 
-import static fechten.Ergebniszustand.AUSSTEHEND;
-import static fechten.Ergebniszustand.UNGUELTIG;
+import static fechten.ErgebnisStatus.AUSSTEHEND;
+import static fechten.ErgebnisStatus.UNGUELTIG;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import werkzeuge.tableau.Teilnehmer;
+
 public class Tableau
 {
-	//private Ergebnis[][] _tablo;
+
 	private List<List<Ergebnis>> _tableau;
 
-	private boolean _bearbeitet;
-	
-	private int[] _gefochten;
-	private int[] _gewonnen;
-	private int[] _erhalten;
-	private int[] _gegeben;
-	
+	private SimpleIntegerProperty[] _gefochten;
+	private SimpleIntegerProperty[] _siege;
+	private SimpleIntegerProperty[] _erhalten;
+	private SimpleIntegerProperty[] _gegeben;
+	private SimpleIntegerProperty[] _index;
+
 	private int _anzahlTeilnehmer;
-	
+	private int _anzahlAngenommen;
+
 	public Tableau(int anzahlTeilnehmer, int maxTreffer)
 	{
 		_anzahlTeilnehmer = anzahlTeilnehmer;
+		_anzahlAngenommen = 0;
 		_tableau = new ArrayList<List<Ergebnis>>();
-		for(int i = 0; i < anzahlTeilnehmer; i++)
+		for (int i = 0; i < anzahlTeilnehmer; i++)
 		{
 			_tableau.add(new ArrayList<Ergebnis>());
-			for(int k = 0; k < anzahlTeilnehmer; k++)
+			for (int k = 0; k < anzahlTeilnehmer; k++)
 			{
-				if(i==k)
+				if (i == k)
 				{
-					_tableau.get(i).add(new Ergebnis(UNGUELTIG, maxTreffer, this));
-				}
-				else
+					_tableau.get(i)
+					        .add(new Ergebnis(UNGUELTIG, maxTreffer, this));
+				} else
 				{
-					_tableau.get(i).add(new Ergebnis(AUSSTEHEND, maxTreffer, this));
+					_tableau.get(i)
+					        .add(new Ergebnis(AUSSTEHEND, maxTreffer, this));
 				}
 			}
 		}
 
-		_tableau.get(0).get(1).eintragen(5, true);
-		_tableau.get(1).get(0).eintragen(0, false);
-		_tableau.get(2).get(1).eintragen(4, true);
-		
-		_gefochten = new int[anzahlTeilnehmer];
-		_gewonnen = new int[anzahlTeilnehmer];
-		_erhalten = new int[anzahlTeilnehmer];
-		_gegeben = new int[anzahlTeilnehmer];
-		
-		_bearbeitet = false;
+		_gefochten = new SimpleIntegerProperty[anzahlTeilnehmer];
+		_siege = new SimpleIntegerProperty[anzahlTeilnehmer];
+		_erhalten = new SimpleIntegerProperty[anzahlTeilnehmer];
+		_gegeben = new SimpleIntegerProperty[anzahlTeilnehmer];
+		_index = new SimpleIntegerProperty[anzahlTeilnehmer];
+
+		for (int i = 0; i < anzahlTeilnehmer; i++)
+		{
+			_gefochten[i] = new SimpleIntegerProperty();
+			_siege[i] = new SimpleIntegerProperty();
+			_erhalten[i] = new SimpleIntegerProperty();
+			_gegeben[i] = new SimpleIntegerProperty();
+			_index[i] = new SimpleIntegerProperty();
+		}
+
+		update();
 	}
-	
+
 	public List<List<Ergebnis>> getTableau()
 	{
 		return _tableau;
 	}
-	
-	public void gefechtEintragen(Fechter f1, Fechter f2, int treffer1, int treffer2, boolean gewonnen1)
+
+	public void gefechtEintragen(Teilnehmer f1, Teilnehmer f2, int treffer1,
+	        int treffer2, boolean gewonnen1)
 	{
-		assert f1.getID() < _anzahlTeilnehmer : "Teilnehmer 1 nicht gültig";
-		assert f2.getID() < _anzahlTeilnehmer : "Teilnehmer 2 nicht gültig";
-		
-		assert f1.getID() >= 0 : "Teilnehmer 1 nicht gültig";
-		assert f2.getID() >= 0: "Teilnehmer 2 nicht gültig";
-		
-		assert f1.getID() != f2.getID() : "Teilnehmer kann nicht gegen sich selbst fechten";
-		
-		_tableau.get(f1.getID()).get(f2.getID()).eintragen(treffer1, gewonnen1);
-		_tableau.get(f2.getID()).get(f1.getID()).eintragen(treffer2, !gewonnen1);
-		
-		_bearbeitet = true;
+		getErgebnis(f1, f2).eintragen(treffer1, gewonnen1);
+
+		getErgebnis(f2, f1).eintragen(treffer2, !gewonnen1);
+		update();
 	}
-	
-	public Ergebnis getErgebnis(Fechter f1, Fechter f2)
+
+	public Ergebnis getErgebnis(Teilnehmer f1, Teilnehmer f2)
 	{
-		return _tableau.get(f1.getID()).get(f2.getID());
+		return _tableau.get(f1.idProperty().get() - 1)
+		        .get(f2.idProperty().get() - 1);
 	}
-	
+
 	private void update()
 	{
-		for(int i = 0; i < _anzahlTeilnehmer; i++)
+		for (int i = 0; i < _anzahlTeilnehmer; i++)
 		{
-			_gewonnen[i] = 0;
-			_gegeben[i] = 0;
-			_gefochten[i] = 0;
-			_erhalten[i] = 0;
+			_siege[i].set(0);
+			_gegeben[i].set(0);
+			_gefochten[i].set(0);
+			_erhalten[i].set(0);
+			_index[i].set(0);
 		}
-		for(int i = 0; i < _anzahlTeilnehmer; i++)
+
+		for (int i = 0; i < _anzahlTeilnehmer; i++)
 		{
-			for(int k = 0; k < _anzahlTeilnehmer; k++)
+			for (int k = 0; k < _anzahlTeilnehmer; k++)
 			{
-				if(_tableau.get(i).get(k).getZustand() == Ergebniszustand.GEFOCHTEN)
+				if (_tableau.get(i).get(k)
+				        .getZustand() == ErgebnisStatus.GEFOCHTEN)
 				{
-					_gefochten[i]++;
-					_gegeben[i] += _tableau.get(i).get(k).getTreffer();
-					_erhalten[k] += _tableau.get(i).get(k).getTreffer();
-					if(_tableau.get(i).get(k).hatGewonnen())
+					_gefochten[i].set(_gefochten[i].get() + 1);
+					
+					_gegeben[i].set(_gegeben[i].get()
+					        + _tableau.get(i).get(k).getTreffer());
+					
+					_erhalten[k].set(_erhalten[k].get()
+					        + _tableau.get(i).get(k).getTreffer());
+					
+					if (_tableau.get(i).get(k).hatGewonnen())
 					{
-						_gewonnen[i]++;
+						_siege[i].set(_siege[i].get() + 1);
 					}
 				}
 			}
 		}
-		_bearbeitet = false;
-	}
-	
-	int getGefochten(Fechter t)
-	{
-		if(_bearbeitet)
+		for(int i = 0; i < _anzahlTeilnehmer; i++)
 		{
-			update();
+			_index[i].set(_gegeben[i].get() - _erhalten[i].get());
 		}
-		return _gefochten[t.getID()];
 	}
-	
-	int getGewonnen(Fechter t)
+
+	public int getNext()
 	{
-		if(_bearbeitet)
+		_anzahlAngenommen++;
+		if (_anzahlAngenommen > _anzahlTeilnehmer)
 		{
-			update();
+			throw new IllegalArgumentException();
 		}
-		return _gewonnen[t.getID()];
+		return _anzahlAngenommen;
 	}
-	
-	int getGegeben(Fechter t)
+
+	public SimpleIntegerProperty gewonnenProperty(int teilnehmer)
 	{
-		if(_bearbeitet)
-		{
-			update();
-		}
-		return _gegeben[t.getID()];
+		return _siege[teilnehmer];
 	}
-	
-	int getErhalten(Fechter t)
+
+	public SimpleIntegerProperty gefochtenProperty(int i)
 	{
-		if(_bearbeitet)
-		{
-			update();
-		}
-		return _erhalten[t.getID()];
+		return _gefochten[i];
+	}
+
+	public SimpleIntegerProperty gegebenProperty(int i)
+	{
+		return _gegeben[i];
+	}
+
+	public SimpleIntegerProperty erhaltenProperty(int i)
+	{
+		return _erhalten[i];
+	}
+
+	public SimpleIntegerProperty indexProperty(int i)
+	{
+		return _index[i];
 	}
 }

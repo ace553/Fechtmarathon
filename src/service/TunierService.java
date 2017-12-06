@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fechten.Fechter;
+import fechten.Gruppe;
 import fechten.Tunier;
 import fechten.TunierStatus;
 import javafx.beans.InvalidationListener;
@@ -52,13 +53,22 @@ public class TunierService implements Observable
 		notifyListeners();
 	}
 	
+	
+	public void streicheNichtAnwesendeFechter()
+	{
+		for(Fechter f: _tunier.getFechter())
+		{
+			if(!f.istAnwesend())
+				f.setzteGestrichen(true);
+		}
+	}
+	
 	public boolean istGespeichert()
 	{
 		return _gespeichert;
 	}
 	public void updateFechter()
 	{
-		_tunier.updateTeilnehmer();
 		bearbeitet();
 	}
 	
@@ -122,7 +132,10 @@ public class TunierService implements Observable
 		
 		for(int i = 0; i < _tunier.getFechter().size(); i++)
 		{
-			_teilnehmer.add(new Teilnehmer(_tunier.getFechter().get(i), _tunier.getTableau()));
+			if(!_tunier.getFechter().get(i).istGestrichen())
+			{
+				_teilnehmer.add(new Teilnehmer(_tunier.getFechter().get(i), _tunier.getTableau()));
+			}
 		}
 		notifyListeners();
 	}
@@ -158,5 +171,32 @@ public class TunierService implements Observable
 	{
 		_tunier.loesche(f);
 		notifyListeners();
+	}
+
+	public boolean alleFechterDa()
+	{
+		for(Fechter f : _tunier.getFechter())
+		{
+			if(!f.anwesendProperty().get() && !f.gestrichenProperty().get())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public Gruppe addGruppe()
+	{
+		return _tunier.addGruppe();
+	}
+
+	public void removeGruppe(Gruppe g)
+	{
+		_tunier.removeGruppe(g);
+	}
+
+	public ObservableList<Fechter> getKeineGruppe()
+	{
+		return _tunier.getKeineGruppe();
 	}
 }

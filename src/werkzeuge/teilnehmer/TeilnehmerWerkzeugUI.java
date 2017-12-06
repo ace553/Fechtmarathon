@@ -17,20 +17,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-public class TeilnehmerWerkzeugUI
+class TeilnehmerWerkzeugUI
 {
 	final Tab _tab;
 
 	final Button _loeschenButton;
 
 	final TableView<Fechter> _table;
-	final TableColumn<Fechter, Integer> _colID;
 	final TableColumn<Fechter, String> _colVornamen;
 	final TableColumn<Fechter, String> _colNachnamen;
 	final TableColumn<Fechter, String> _colVerein;
 	final TableColumn<Fechter, Boolean> _colAnwesend;
 	final TableColumn<Fechter, Boolean> _colGestrichen;
-
+	final TableColumn<Fechter, String> _colGruppe;
+	
 	final TextField _vorname;
 	final TextField _nachname;
 	final TextField _verein;
@@ -44,13 +44,13 @@ public class TeilnehmerWerkzeugUI
 		_loeschenButton.setDisable(true);
 		_table = new TableView<Fechter>();
 
-		_colID = new TableColumn<Fechter, Integer>("ID");
 		
 		_colVornamen = new TableColumn<Fechter, String>("Vorname");
 		_colNachnamen = new TableColumn<Fechter, String>("Nachname");
 		_colVerein = new TableColumn<Fechter, String>("Verein");
 		_colAnwesend = new TableColumn<Fechter, Boolean>("Anwesend");
 		_colGestrichen = new TableColumn<Fechter, Boolean>("Gestrichen");
+		_colGruppe = new TableColumn<Fechter, String>("Gruppe");
 		_vorname = new TextField();
 		_nachname = new TextField();
 		_verein = new TextField();
@@ -67,12 +67,7 @@ public class TeilnehmerWerkzeugUI
 
 		_table.setEditable(true);
 		_table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-		_colID.setCellValueFactory(
-		        new PropertyValueFactory<Fechter, Integer>("id"));
-		_colID.setSortable(false);
-		_colID.setStyle( "-fx-alignment: CENTER;");
-		_colID.setPrefWidth(30);
+		
 		_colVornamen.setCellValueFactory(
 		        new PropertyValueFactory<Fechter, String>("vorname"));
 		_colVornamen
@@ -113,9 +108,12 @@ public class TeilnehmerWerkzeugUI
 				        return new CheckBoxTableCell<Fechter, Boolean>();
 			        }
 		        });
+		
+		_colGruppe.setCellValueFactory(
+		        new PropertyValueFactory<Fechter, String>("gruppe"));
 
-		_table.getColumns().addAll(_colID, _colVornamen, _colNachnamen,
-		        _colVerein, _colAnwesend, _colGestrichen);
+		_table.getColumns().addAll(_colVornamen, _colNachnamen,
+		        _colVerein, _colAnwesend, _colGestrichen, _colGruppe);
 
 		_vorname.setMaxWidth(_colVornamen.getPrefWidth());
 		_vorname.setPromptText("Vorname");
