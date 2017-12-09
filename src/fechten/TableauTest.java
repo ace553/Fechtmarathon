@@ -12,13 +12,13 @@ public class TableauTest
 	Tableau tableau;
 
 	TunierService t;
-	
+
 	Tunier tunier;
 
 	public TableauTest()
 	{
 		tunier = new Tunier();
-		
+
 		t = new TunierService(tunier);
 		for (int i = 0; i < 10; i++)
 		{
@@ -37,8 +37,7 @@ public class TableauTest
 		{
 			for (int k = 0; k < 10; k++)
 			{
-				Ergebnis e = tableau.getErgebnis(t.getTeilnehmer().get(i),
-				        t.getTeilnehmer().get(k));
+				Ergebnis e = tableau.getErgebnis(t.getTeilnehmer().get(i), t.getTeilnehmer().get(k));
 				if (i == k)
 				{
 					assertEquals(ErgebnisStatus.UNGUELTIG, e.getZustand());
@@ -57,7 +56,7 @@ public class TableauTest
 			assertEquals(0, tableau.gegebenProperty(i).get());
 		}
 	}
-	
+
 	@Test
 	public void testGefechtEintragen()
 	{
@@ -66,19 +65,19 @@ public class TableauTest
 		tableau.gefechtEintragen(t.getTeilnehmer().get(2), t.getTeilnehmer().get(1), 5, 3, true);
 
 		tableau.gefechtEintragen(t.getTeilnehmer().get(2), t.getTeilnehmer().get(0), 5, 3, true);
-		
+
 		assertEquals(2, tableau.gefochtenProperty(0).get());
 		assertEquals(1, tableau.gewonnenProperty(0).get());
 		assertEquals(8, tableau.erhaltenProperty(0).get());
 		assertEquals(8, tableau.gegebenProperty(0).get());
 		assertEquals(0, tableau.indexProperty(0).get());
-		
+
 		assertEquals(2, tableau.gefochtenProperty(1).get());
 		assertEquals(0, tableau.gewonnenProperty(1).get());
 		assertEquals(10, tableau.erhaltenProperty(1).get());
 		assertEquals(6, tableau.gegebenProperty(1).get());
 		assertEquals(-4, tableau.indexProperty(1).get());
-		
+
 		assertEquals(2, tableau.gefochtenProperty(2).get());
 		assertEquals(2, tableau.gewonnenProperty(2).get());
 		assertEquals(6, tableau.erhaltenProperty(2).get());

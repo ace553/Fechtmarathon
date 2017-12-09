@@ -16,20 +16,20 @@ import werkzeuge.tableau.TableauWerkzeug;
 
 public class Main extends Application
 {
-	
+
 	private StageWerkzeug _stageWerkzeug;
 	private TunierService _tunier;
-	
+
 	public Main()
 	{
 		_tunier = new TunierService(new Tunier());
 	}
-	
+
 	@Override
 	public void start(Stage stage)
 	{
 		_stageWerkzeug = new StageWerkzeug(stage, _tunier);
-		
+
 		stage.show();
 	}
 

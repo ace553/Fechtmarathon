@@ -46,36 +46,34 @@ public class TableauWerkzeug
 			@Override
 			public void handle(ActionEvent event)
 			{
-				if( _tunier.getFechter().size() > 0)
+				if (_tunier.getFechter().size() > 0)
 				{
-					if(_tunier.alleFechterDa())
+					if (_tunier.alleFechterDa())
 					{
 						Alert alert = new Alert(AlertType.CONFIRMATION);
 						alert.setTitle("Tunier starten");
 						alert.setHeaderText("Soll das Tunier wirklich gestartet werden?\nEs können nach Tunierstart keine Fechter mehr hinzugefügt werden\nund keine Gruppen mehr bearbeitet werden.");
 
 						Optional<ButtonType> result = alert.showAndWait();
-						
-						if(result.isPresent() && result.get() == ButtonType.OK)
+
+						if (result.isPresent() && result.get() == ButtonType.OK)
 						{
 							starteTunier();
 						}
-					}
-					else
+					} else
 					{
 						Alert alert = new Alert(AlertType.CONFIRMATION);
 						alert.setTitle("Tunier kann nicht gestartet werden");
 						alert.setHeaderText("Alle nicht anwesenden Fechter streichen?");
 
 						Optional<ButtonType> result = alert.showAndWait();
-						if(result.isPresent() && result.get() == ButtonType.OK)
+						if (result.isPresent() && result.get() == ButtonType.OK)
 						{
 							_tunier.streicheNichtAnwesendeFechter();
 							starteTunier();
 						}
 					}
-				}
-				else
+				} else
 				{
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setTitle("Keine Teilnehmer");
@@ -83,7 +81,7 @@ public class TableauWerkzeug
 					alert.setContentText("Melden sie mindestens zwei Fechter.");
 					alert.showAndWait();
 				}
-				
+
 			}
 		});
 	}
@@ -101,58 +99,54 @@ public class TableauWerkzeug
 			c.setSortable(false);
 			final int t = i;
 			c.setCellValueFactory(data -> data.getValue().gefechtProperty(t));
-			c.setCellFactory(
-			        new Callback<TableColumn<Teilnehmer, String>, TableCell<Teilnehmer, String>>()
-			        {
-				        public TableCell<Teilnehmer, String> call(
-				                TableColumn<Teilnehmer, String> p)
-				        {
-					        TableCell<Teilnehmer, String> cell = new TableCell<Teilnehmer, String>()
-					        {
-						        @Override
-						        public void updateItem(String item,
-						                boolean empty)
-						        {
-							        super.updateItem(item, empty);
-							        setText(empty ? null : item);
-							        if (!empty && item.equals("O"))
-							        {
-								        setText("");
-								        setStyle("-fx-background-color:"
-								                + getString());
-							        }
-						        }
+			c.setCellFactory(new Callback<TableColumn<Teilnehmer, String>, TableCell<Teilnehmer, String>>()
+			{
+				public TableCell<Teilnehmer, String> call(TableColumn<Teilnehmer, String> p)
+				{
+					TableCell<Teilnehmer, String> cell = new TableCell<Teilnehmer, String>()
+					{
+						@Override
+						public void updateItem(String item, boolean empty)
+						{
+							super.updateItem(item, empty);
+							setText(empty ? null : item);
+							if (!empty && item.equals("O"))
+							{
+								setText("");
+								setStyle("-fx-background-color:" + getString());
+							}
+						}
 
-						        private String getString()
-						        {
-							        return "black";
-						        }
-					        };
+						private String getString()
+						{
+							return "black";
+						}
+					};
 
-					        return cell;
-				        }
-			        });
+					return cell;
+				}
+			});
 			_ui._tableauView.getColumns().add(c);
 		}
-		
+
 		TableColumn<Teilnehmer, Integer> siege = new TableColumn<Teilnehmer, Integer>("Sg");
 		siege.setStyle("-fx-alignment: CENTER;");
 		siege.setCellValueFactory(data -> data.getValue().siegeProperty().asObject());
 		siege.setSortable(false);
 		_ui._tableauView.getColumns().add(siege);
-		
+
 		TableColumn<Teilnehmer, Integer> index = new TableColumn<Teilnehmer, Integer>("Ind");
 		index.setStyle("-fx-alignment: CENTER;");
 		index.setCellValueFactory(data -> data.getValue().indexProperty().asObject());
 		index.setSortable(false);
 		_ui._tableauView.getColumns().add(index);
-		
+
 		TableColumn<Teilnehmer, Integer> gegeben = new TableColumn<Teilnehmer, Integer>("geg");
 		gegeben.setStyle("-fx-alignment: CENTER;");
 		gegeben.setCellValueFactory(data -> data.getValue().gegebenProperty().asObject());
 		gegeben.setSortable(false);
 		_ui._tableauView.getColumns().add(gegeben);
-		
+
 		TableColumn<Teilnehmer, Integer> erhalten = new TableColumn<Teilnehmer, Integer>("erh");
 		erhalten.setStyle("-fx-alignment: CENTER;");
 		erhalten.setCellValueFactory(data -> data.getValue().erhaltenProperty().asObject());

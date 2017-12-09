@@ -1,5 +1,5 @@
 
--Gruppenansicht
+-Gruppenansicht --DONE
 	- Alle Fechter in Gruppen aufteilen
 	- Automatische Verteilungs Buttons (Zufällig und nach Verein)
 	
@@ -7,10 +7,20 @@
 	- für Tablo reparieren --DONE
 
 -TableauWerkzeug
-	- Fechter die nicht anwesend sind werden gestrichen.
+	- Fechter die nicht anwesend sind werden gestrichen. --DONE
 		- TunierService -> streicheNichtAnwesendeFechter() --DONE
 		- Beim starten werden nur anwesende Fechter zu Teilnehmern --DONE
 		
 - Nach Tunierstart
 	- Möglichkeit der Gefechtseintragung
 	- Erkennung der Gruppe der Fechter (Striche im Tableau)
+	
+-Tunier laden und speichern
+	- Gestartete Tuniere speichern
+	- Gestartete Tuniere laden
+	- ergebnisse Speichern
+	
+	
+- ADDON
+	- Vor/Zurück shortcuts implementieren
+	- Kopieren und einfügen implentieren

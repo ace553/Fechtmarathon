@@ -52,8 +52,7 @@ public class Ergebnis
 	{
 		if (treffer > MAX_TREFFER)
 		{
-			throw new IllegalArgumentException("Es können nicht mehr als "
-			        + MAX_TREFFER + " eingetragen werden.");
+			throw new IllegalArgumentException("Es können nicht mehr als " + MAX_TREFFER + " eingetragen werden.");
 		}
 		_zustand = GEFOCHTEN;
 		_treffer = treffer;
@@ -80,8 +79,7 @@ public class Ergebnis
 			{
 				b.append(_treffer);
 			}
-		}
-		else if(_zustand == ErgebnisStatus.UNGUELTIG)
+		} else if (_zustand == ErgebnisStatus.UNGUELTIG)
 		{
 			b.append("O");
 		}

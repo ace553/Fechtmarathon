@@ -7,7 +7,7 @@ import org.junit.Test;
 public class ErgebnisTest
 {
 	private Tableau tablo;
-	
+
 	public ErgebnisTest()
 	{
 		tablo = new Tableau(10, 5);
@@ -21,17 +21,17 @@ public class ErgebnisTest
 		assertEquals(0, e.getTreffer());
 		assertFalse(e.hatGewonnen());
 		assertEquals(ErgebnisStatus.AUSSTEHEND, e.getZustand());
-		assertEquals("-",e.toString());
-		
+		assertEquals("-", e.toString());
+
 		e = new Ergebnis(ErgebnisStatus.UNGUELTIG, 5, null);
-		
+
 		assertEquals(null, e.getTablo());
 		assertEquals(0, e.getTreffer());
 		assertFalse(e.hatGewonnen());
 		assertEquals(ErgebnisStatus.UNGUELTIG, e.getZustand());
-		assertEquals("X",e.toString());
+		assertEquals("X", e.toString());
 	}
-	
+
 	@Test
 	public void testEintragen()
 	{
@@ -41,7 +41,7 @@ public class ErgebnisTest
 		assertFalse(e.hatGewonnen());
 		assertEquals("3", e.toString());
 		assertEquals(ErgebnisStatus.GEFOCHTEN, e.getZustand());
-		
+
 		e = new Ergebnis(ErgebnisStatus.AUSSTEHEND, 5, tablo);
 		e.eintragen(5, true);
 		assertEquals(5, e.getTreffer());

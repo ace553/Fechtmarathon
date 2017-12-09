@@ -14,41 +14,41 @@ public class Teilnehmer
 	private final SimpleIntegerProperty _id;
 	private final SimpleStringProperty _name;
 	private final List<SimpleStringProperty> _gefechte;
-	
+
 	private final SimpleIntegerProperty _siege;
 	private final SimpleIntegerProperty _gefochten;
 	private final SimpleIntegerProperty _gegeben;
 	private final SimpleIntegerProperty _erhalten;
 	private final SimpleIntegerProperty _index;
-	
+
 	public Teilnehmer(Fechter f, Tableau t)
 	{
 		_id = new SimpleIntegerProperty(t.getNext());
 		_name = f.nameProperty();
 		_gefechte = new ArrayList<>();
-		
-		_siege = t.gewonnenProperty(_id.get()-1);
-		_gefochten = t.gefochtenProperty(_id.get()-1);
-		_gegeben = t.gegebenProperty(_id.get()-1);
-		_erhalten = t.erhaltenProperty(_id.get()-1);
-		_index = t.indexProperty(_id.get()-1);
-		
-		for(int i = 0; i < t.getTableau().size(); i++)
+
+		_siege = t.gewonnenProperty(_id.get() - 1);
+		_gefochten = t.gefochtenProperty(_id.get() - 1);
+		_gegeben = t.gegebenProperty(_id.get() - 1);
+		_erhalten = t.erhaltenProperty(_id.get() - 1);
+		_index = t.indexProperty(_id.get() - 1);
+
+		for (int i = 0; i < t.getTableau().size(); i++)
 		{
-			_gefechte.add(t.getTableau().get(_id.get()-1).get(i).styledProperty());
+			_gefechte.add(t.getTableau().get(_id.get() - 1).get(i).styledProperty());
 		}
 	}
-	
+
 	public SimpleIntegerProperty idProperty()
 	{
 		return _id;
 	}
-	
+
 	public SimpleStringProperty nameProperty()
 	{
 		return _name;
 	}
-	
+
 	public SimpleStringProperty gefechtProperty(int i)
 	{
 		return _gefechte.get(i);
@@ -73,12 +73,10 @@ public class Teilnehmer
 	{
 		return _erhalten;
 	}
-	
+
 	public IntegerProperty gefochtenProperty()
 	{
 		return _gefochten;
 	}
-	
-	
-	
+
 }

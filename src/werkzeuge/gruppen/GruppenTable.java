@@ -19,7 +19,7 @@ public class GruppenTable extends VBox
 	private final Button _closeButton;
 	private final Label _title;
 	private final StringProperty _titProp;
-	
+
 	@SuppressWarnings("unchecked")
 	public GruppenTable(StringProperty title, boolean closeable)
 	{
@@ -31,25 +31,23 @@ public class GruppenTable extends VBox
 		_title.setAlignment(Pos.BASELINE_CENTER);
 		_title.setFont(new Font(15));
 		BorderPane titleBar = new BorderPane();
-		if(closeable)
+		if (closeable)
 			titleBar.setRight(_closeButton);
 		titleBar.setCenter(_title);
 		titleBar.setPadding(new Insets(10, 0, 5, 0));
 		getChildren().addAll(titleBar, _table);
 		setAlignment(Pos.CENTER);
-		
+
 		setMaxWidth(200);
-		TableColumn<Fechter,String> name = new TableColumn<>("Name");
-		name.setCellValueFactory(
-		        new PropertyValueFactory<Fechter, String>("name"));
+		TableColumn<Fechter, String> name = new TableColumn<>("Name");
+		name.setCellValueFactory(new PropertyValueFactory<Fechter, String>("name"));
 		name.setPrefWidth(120);
-		TableColumn<Fechter,String> verein = new TableColumn<>("Verein");
-		verein.setCellValueFactory(
-		        new PropertyValueFactory<Fechter, String>("verein"));
+		TableColumn<Fechter, String> verein = new TableColumn<>("Verein");
+		verein.setCellValueFactory(new PropertyValueFactory<Fechter, String>("verein"));
 		verein.setPrefWidth(70);
 		_table.getColumns().addAll(name, verein);
 	}
-	
+
 	public TableView<Fechter> getTable()
 	{
 		return _table;
@@ -59,10 +57,10 @@ public class GruppenTable extends VBox
 	{
 		return _closeButton;
 	}
-	
+
 	public void updateTitle()
 	{
 		_title.setText(_titProp.get());
 	}
-	
+
 }

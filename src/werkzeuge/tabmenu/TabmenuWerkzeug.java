@@ -11,16 +11,15 @@ import werkzeuge.tableau.TableauWerkzeug;
 public class TabmenuWerkzeug
 {
 	private final TabmenuWerkzeugUI _ui;
-	
+
 	private final TunierService _tunier;
-	
-	
+
 	public TabmenuWerkzeug(TunierService tunier)
 	{
 		_tunier = tunier;
 		_ui = new TabmenuWerkzeugUI();
 	}
-	
+
 	public TabPane getTabPane()
 	{
 		return _ui._tabs;
@@ -30,6 +29,5 @@ public class TabmenuWerkzeug
 	{
 		_ui._tabs.getTabs().addAll(tabs);
 	}
-	
 
 }

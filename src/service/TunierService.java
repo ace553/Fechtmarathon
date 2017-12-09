@@ -1,4 +1,5 @@
 package service;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,57 +22,56 @@ public class TunierService implements Observable
 {
 	private Tunier _tunier;
 	private List<InvalidationListener> _listeners;
-	
-	
+
 	private ObservableList<Teilnehmer> _teilnehmer;
-	
+
 	private boolean _gespeichert;
-	
+
 	public TunierService(Tunier t)
 	{
 		_tunier = t;
 		_listeners = new ArrayList<>();
 		_gespeichert = true;
 		_teilnehmer = FXCollections.observableArrayList();
-		
+
 	}
-	
+
 	public ObservableList<Teilnehmer> getTeilnehmer()
 	{
 		return _teilnehmer;
 	}
-	
+
 	public ObservableList<Fechter> getFechter()
 	{
 		return _tunier.getFechter();
 	}
-	
+
 	public void melde(Fechter fechter)
 	{
 		_tunier.melde(fechter);
 		_gespeichert = false;
 		notifyListeners();
 	}
-	
-	
+
 	public void streicheNichtAnwesendeFechter()
 	{
-		for(Fechter f: _tunier.getFechter())
+		for (Fechter f : _tunier.getFechter())
 		{
-			if(!f.istAnwesend())
+			if (!f.istAnwesend())
 				f.setzteGestrichen(true);
 		}
 	}
-	
+
 	public boolean istGespeichert()
 	{
 		return _gespeichert;
 	}
+
 	public void updateFechter()
 	{
 		bearbeitet();
 	}
-	
+
 	public void ladeTunier(File file)
 	{
 		List<String> zeilen = null;
@@ -82,13 +82,13 @@ public class TunierService implements Observable
 		{
 			e.printStackTrace();
 		}
-		
+
 		_tunier.getFechter().clear();
-		
-		for(String zeile: zeilen)
+
+		for (String zeile : zeilen)
 		{
 			String[] parts = zeile.replace("\n", "").split(";");
-			if(parts.length != 5)
+			if (parts.length != 5)
 			{
 				return;
 			}
@@ -97,10 +97,10 @@ public class TunierService implements Observable
 			f.setzteGestrichen(parts[4].equals("true"));
 			_tunier.melde(f);
 		}
-		 _gespeichert = true;
-		 notifyListeners();
+		_gespeichert = true;
+		notifyListeners();
 	}
-	
+
 	public void speichern(File file)
 	{
 
@@ -112,43 +112,43 @@ public class TunierService implements Observable
 		{
 			e.printStackTrace();
 		}
-		for(Fechter f : _tunier.getFechter())
+		for (Fechter f : _tunier.getFechter())
 		{
-			writer.print(f.getVorname()+";"+f.getNachname()+";"+f.getVerein()+";"+f.istAnwesend()+";"+f.istGestrichen()+"\n");
+			writer.print(f.getVorname() + ";" + f.getNachname() + ";" + f.getVerein() + ";" + f.istAnwesend() + ";" + f.istGestrichen() + "\n");
 		}
 		writer.close();
 		_gespeichert = true;
 		notifyListeners();
 	}
-	
+
 	public TunierStatus getStatus()
 	{
 		return _tunier.getStatus();
 	}
-	
+
 	public void starte()
 	{
 		_tunier.starteTunier();
-		
-		for(int i = 0; i < _tunier.getFechter().size(); i++)
+
+		for (int i = 0; i < _tunier.getFechter().size(); i++)
 		{
-			if(!_tunier.getFechter().get(i).istGestrichen())
+			if (!_tunier.getFechter().get(i).istGestrichen())
 			{
 				_teilnehmer.add(new Teilnehmer(_tunier.getFechter().get(i), _tunier.getTableau()));
 			}
 		}
 		notifyListeners();
 	}
-	
+
 	public void bearbeitet()
 	{
 		_gespeichert = false;
 		notifyListeners();
 	}
-	
+
 	public void notifyListeners()
 	{
-		for(InvalidationListener l : _listeners)
+		for (InvalidationListener l : _listeners)
 		{
 			l.invalidated(this);
 		}
@@ -164,7 +164,7 @@ public class TunierService implements Observable
 	public void removeListener(InvalidationListener listener)
 	{
 		_listeners.remove(listener);
-		
+
 	}
 
 	public void loesche(Fechter f)
@@ -175,9 +175,9 @@ public class TunierService implements Observable
 
 	public boolean alleFechterDa()
 	{
-		for(Fechter f : _tunier.getFechter())
+		for (Fechter f : _tunier.getFechter())
 		{
-			if(!f.anwesendProperty().get() && !f.gestrichenProperty().get())
+			if (!f.anwesendProperty().get() && !f.gestrichenProperty().get())
 			{
 				return false;
 			}

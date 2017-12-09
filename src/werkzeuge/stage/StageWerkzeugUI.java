@@ -9,13 +9,13 @@ public class StageWerkzeugUI
 {
 
 	final Stage _stage;
-	
+
 	public StageWerkzeugUI(Stage s)
 	{
 		_stage = s;
 
 	}
-	
+
 	public void setupStage(Node... children)
 	{
 		VBox box = new VBox();
@@ -23,7 +23,7 @@ public class StageWerkzeugUI
 		Scene scene = new Scene(box);
 		_stage.setTitle("Marathon Tunier Manager");
 		_stage.setMaximized(true);
-		
+
 		_stage.setScene(scene);
 	}
 }

@@ -35,12 +35,10 @@ public class Tableau
 			{
 				if (i == k)
 				{
-					_tableau.get(i)
-					        .add(new Ergebnis(UNGUELTIG, maxTreffer, this));
+					_tableau.get(i).add(new Ergebnis(UNGUELTIG, maxTreffer, this));
 				} else
 				{
-					_tableau.get(i)
-					        .add(new Ergebnis(AUSSTEHEND, maxTreffer, this));
+					_tableau.get(i).add(new Ergebnis(AUSSTEHEND, maxTreffer, this));
 				}
 			}
 		}
@@ -68,8 +66,7 @@ public class Tableau
 		return _tableau;
 	}
 
-	public void gefechtEintragen(Teilnehmer f1, Teilnehmer f2, int treffer1,
-	        int treffer2, boolean gewonnen1)
+	public void gefechtEintragen(Teilnehmer f1, Teilnehmer f2, int treffer1, int treffer2, boolean gewonnen1)
 	{
 		getErgebnis(f1, f2).eintragen(treffer1, gewonnen1);
 
@@ -79,8 +76,7 @@ public class Tableau
 
 	public Ergebnis getErgebnis(Teilnehmer f1, Teilnehmer f2)
 	{
-		return _tableau.get(f1.idProperty().get() - 1)
-		        .get(f2.idProperty().get() - 1);
+		return _tableau.get(f1.idProperty().get() - 1).get(f2.idProperty().get() - 1);
 	}
 
 	private void update()
@@ -98,17 +94,14 @@ public class Tableau
 		{
 			for (int k = 0; k < _anzahlTeilnehmer; k++)
 			{
-				if (_tableau.get(i).get(k)
-				        .getZustand() == ErgebnisStatus.GEFOCHTEN)
+				if (_tableau.get(i).get(k).getZustand() == ErgebnisStatus.GEFOCHTEN)
 				{
 					_gefochten[i].set(_gefochten[i].get() + 1);
-					
-					_gegeben[i].set(_gegeben[i].get()
-					        + _tableau.get(i).get(k).getTreffer());
-					
-					_erhalten[k].set(_erhalten[k].get()
-					        + _tableau.get(i).get(k).getTreffer());
-					
+
+					_gegeben[i].set(_gegeben[i].get() + _tableau.get(i).get(k).getTreffer());
+
+					_erhalten[k].set(_erhalten[k].get() + _tableau.get(i).get(k).getTreffer());
+
 					if (_tableau.get(i).get(k).hatGewonnen())
 					{
 						_siege[i].set(_siege[i].get() + 1);
@@ -116,7 +109,7 @@ public class Tableau
 				}
 			}
 		}
-		for(int i = 0; i < _anzahlTeilnehmer; i++)
+		for (int i = 0; i < _anzahlTeilnehmer; i++)
 		{
 			_index[i].set(_gegeben[i].get() - _erhalten[i].get());
 		}
