@@ -21,8 +21,10 @@ public class StageWerkzeugUI
 		VBox box = new VBox();
 		box.getChildren().addAll(children);
 		Scene scene = new Scene(box);
+		_stage.setWidth(1050);
+		_stage.setHeight(700);
 		_stage.setTitle("Marathon Tunier Manager");
-		_stage.setMaximized(true);
+		//_stage.setMaximized(true);
 
 		_stage.setScene(scene);
 	}

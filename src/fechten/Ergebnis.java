@@ -81,7 +81,7 @@ public class Ergebnis
 			}
 		} else if (_zustand == ErgebnisStatus.UNGUELTIG)
 		{
-			b.append("O");
+			b.append("X");
 		}
 		_styled.set(b.toString());
 

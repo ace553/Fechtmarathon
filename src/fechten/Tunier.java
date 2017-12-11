@@ -58,6 +58,7 @@ public class Tunier
 				g.getGruppe().remove(f);
 			}
 		}
+		_keineGruppe.remove(f);
 		newGruppe.add(f);
 		f.gruppeProperty().set(newGruppe.nameProperty().get().substring(newGruppe.nameProperty().get().length() - 2));
 	}

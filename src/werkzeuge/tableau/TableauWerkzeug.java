@@ -96,6 +96,7 @@ public class TableauWerkzeug
 			TableColumn<Teilnehmer, String> c = new TableColumn<Teilnehmer, String>();
 			c.setText("" + (i + 1));
 			c.setStyle("-fx-alignment: CENTER;");
+			c.setPrefWidth(30);
 			c.setSortable(false);
 			final int t = i;
 			c.setCellValueFactory(data -> data.getValue().gefechtProperty(t));
@@ -110,10 +111,14 @@ public class TableauWerkzeug
 						{
 							super.updateItem(item, empty);
 							setText(empty ? null : item);
-							if (!empty && item.equals("O"))
+							if (!empty && item.equals("X"))
 							{
 								setText("");
 								setStyle("-fx-background-color:" + getString());
+							}
+							else
+							{
+								setStyle("-fx-background-color:null");
 							}
 						}
 

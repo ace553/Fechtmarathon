@@ -55,13 +55,13 @@ class TableauWerkzeugUI
 		_colID.setSortable(false);
 
 		_tableauView.getColumns().addAll(_colID, _colNamen);
+		_tableauView.setPrefHeight(10000);
 		_tableauContent.getChildren().add(_tableauView);
 	}
 
 	private void erstelleTab()
 	{
 		_tab.setClosable(false);
-		// _startTunierButton.setDisable(true);
 		VBox vbox = new VBox();
 
 		_startContent.setAlignment(Pos.CENTER);

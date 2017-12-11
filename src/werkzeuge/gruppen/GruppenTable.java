@@ -25,7 +25,7 @@ public class GruppenTable extends VBox
 	{
 		_titProp = title;
 		_table = new TableView<>();
-		_closeButton = new Button("X");
+		_closeButton = new Button("\u00D7");
 		_title = new Label();
 		_title.setText(title.get());
 		_title.setAlignment(Pos.BASELINE_CENTER);

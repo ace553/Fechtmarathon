@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import fechten.Fechter;
@@ -70,6 +72,28 @@ public class TunierService implements Observable
 	public void updateFechter()
 	{
 		bearbeitet();
+	}
+	
+	public void verteileFechterZufaellig()
+	{
+		Collections.shuffle(_tunier.getKeineGruppe());
+		int gSize = _tunier.getGruppen().size();
+		int fSize = _tunier.getKeineGruppe().size();
+		int gruppenGroesse = fSize / gSize; 
+		int nochZuVerteilen =  fSize % gSize;
+
+		for(Gruppe g : _tunier.getGruppen())
+		{
+			for(int i = 0; i < gruppenGroesse; i++)
+			{
+				_tunier.putFechterInGruppe(_tunier.getKeineGruppe().get(0), g);
+			}
+		}
+		
+		for(int i = 0; i < nochZuVerteilen; i++)
+		{
+			_tunier.putFechterInGruppe(_tunier.getKeineGruppe().get(0), _tunier.getGruppen().get(i));
+		}
 	}
 
 	public void ladeTunier(File file)

@@ -17,10 +17,11 @@ public class GruppenWerkzeug
 		_tunier = tunier;
 
 		_ui._fechterTable.getTable().setItems(_tunier.getKeineGruppe());
-		for (int i = 0; i < 30; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			registriereNeueGruppe();
 		}
+		registriereZufaelligVerteilenButton();
 	}
 
 	public Tab getTab()
@@ -28,6 +29,19 @@ public class GruppenWerkzeug
 		return _ui._tab;
 	}
 
+	private void registriereZufaelligVerteilenButton()
+	{
+		_ui._zufaelligAufteilen.setOnAction(new EventHandler<ActionEvent>()
+		{
+
+			@Override
+			public void handle(ActionEvent event)
+			{
+				_tunier.verteileFechterZufaellig();
+			}
+		});
+	}
+	
 	private void registriereNeueGruppe()
 	{
 		Gruppe g = _tunier.addGruppe();
