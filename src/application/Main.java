@@ -17,6 +17,7 @@ import werkzeuge.tableau.TableauWerkzeug;
 public class Main extends Application
 {
 
+	@SuppressWarnings("unused")
 	private StageWerkzeug _stageWerkzeug;
 	private TunierService _tunier;
 

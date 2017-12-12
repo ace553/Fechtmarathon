@@ -44,7 +44,7 @@ public class Tunier
 
 	public void removeGruppe(Gruppe g)
 	{
-		_keineGruppe.addAll(g.getGruppe());
+		_keineGruppe.addAll(g.getFechter());
 		_gruppen.remove(g);
 		updateGruppenNamen();
 	}
@@ -55,7 +55,7 @@ public class Tunier
 		{
 			if (g.nameProperty().get().endsWith(f.gruppeProperty().get()))
 			{
-				g.getGruppe().remove(f);
+				g.getFechter().remove(f);
 			}
 		}
 		_keineGruppe.remove(f);

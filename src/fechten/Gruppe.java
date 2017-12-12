@@ -15,7 +15,7 @@ public class Gruppe
 		_name = new SimpleStringProperty(name);
 	}
 
-	public ObservableList<Fechter> getGruppe()
+	public ObservableList<Fechter> getFechter()
 	{
 		return _gruppe;
 	}

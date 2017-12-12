@@ -25,6 +25,7 @@ class GruppenWerkzeugUI
 
 	final Button _zufaelligAufteilen;
 	final Button _nachVereinAufteilen;
+	final Button _neueGruppeButton;
 	final FlowPane _pane;
 
 	GruppenWerkzeugUI()
@@ -33,10 +34,8 @@ class GruppenWerkzeugUI
 		_gruppen = new ArrayList<GruppenTable>();
 		_zufaelligAufteilen = new Button("Zufällig aufteilen");
 		_nachVereinAufteilen = new Button("Nach Verein aufteilen");
-
+		_neueGruppeButton = new Button("Neue Gruppe");
 		_pane = new FlowPane();
-		_pane.setHgap(50);
-		_pane.setVgap(10);
 		_fechterTable = newTable(new SimpleStringProperty("Keine Gruppe"), null, false);
 		erstelleTab();
 	}
@@ -44,6 +43,10 @@ class GruppenWerkzeugUI
 	private void erstelleTab()
 	{
 		_tab.setClosable(false);
+
+		_pane.setPadding(new Insets(10,10,10,10));
+		_pane.setHgap(50);
+		_pane.setVgap(10);
 		ScrollPane scroll = new ScrollPane();
 
 		scroll.setVbarPolicy(ScrollBarPolicy.ALWAYS);
@@ -54,7 +57,8 @@ class GruppenWerkzeugUI
 		box.setPadding(new Insets(10, 10, 10, 10));
 		HBox buttons = new HBox();
 		buttons.setSpacing(10);
-		buttons.getChildren().addAll(_zufaelligAufteilen, _nachVereinAufteilen);
+		buttons.setPadding(new Insets(10,10,10,10));
+		buttons.getChildren().addAll(_zufaelligAufteilen, _nachVereinAufteilen, _neueGruppeButton);
 		box.getChildren().addAll(buttons, scroll);
 		_tab.setContent(box);
 	}

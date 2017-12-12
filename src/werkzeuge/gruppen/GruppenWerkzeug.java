@@ -22,6 +22,8 @@ public class GruppenWerkzeug
 			registriereNeueGruppe();
 		}
 		registriereZufaelligVerteilenButton();
+		registriereNeueGruppeButton();
+		registriereNachVereinVerteilenButton();
 	}
 
 	public Tab getTab()
@@ -42,10 +44,35 @@ public class GruppenWerkzeug
 		});
 	}
 	
+	private void registriereNachVereinVerteilenButton()
+	{
+		_ui._nachVereinAufteilen.setOnAction(new EventHandler<ActionEvent>()
+		{
+
+			@Override
+			public void handle(ActionEvent event)
+			{
+				_tunier.verteileFechterNachVerein();
+			}
+		});
+	}
+	
+	private void registriereNeueGruppeButton()
+	{
+		_ui._neueGruppeButton.setOnAction(new EventHandler<ActionEvent>()
+		{
+			@Override
+			public void handle(ActionEvent event)
+			{
+				registriereNeueGruppe();
+			}
+		});
+	}
+	
 	private void registriereNeueGruppe()
 	{
 		Gruppe g = _tunier.addGruppe();
-		GruppenTable f = _ui.newTable(g.nameProperty(), g.getGruppe(), true);
+		GruppenTable f = _ui.newTable(g.nameProperty(), g.getFechter(), true);
 		f.getCloseButton().setOnAction(new EventHandler<ActionEvent>()
 		{
 

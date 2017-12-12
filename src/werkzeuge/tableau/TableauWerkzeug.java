@@ -48,7 +48,7 @@ public class TableauWerkzeug
 			{
 				if (_tunier.getFechter().size() > 0)
 				{
-					if (_tunier.alleFechterDa())
+					if (_tunier.alleFechterAnwesendOderGestrichen())
 					{
 						Alert alert = new Alert(AlertType.CONFIRMATION);
 						alert.setTitle("Tunier starten");

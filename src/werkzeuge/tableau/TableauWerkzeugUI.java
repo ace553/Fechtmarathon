@@ -55,6 +55,7 @@ class TableauWerkzeugUI
 		_colID.setSortable(false);
 
 		_tableauView.getColumns().addAll(_colID, _colNamen);
+		_tableauView.getSelectionModel().setCellSelectionEnabled(true);
 		_tableauView.setPrefHeight(10000);
 		_tableauContent.getChildren().add(_tableauView);
 	}

@@ -23,7 +23,7 @@ public class TableauTest
 		for (int i = 0; i < 10; i++)
 		{
 			Fechter f = new Fechter("A", "A", "A");
-			f.setzteAnwesend(true);
+			f.anwesendProperty().set(true);
 			t.melde(f);
 		}
 		t.starte();

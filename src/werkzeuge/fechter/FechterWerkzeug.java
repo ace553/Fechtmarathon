@@ -52,7 +52,7 @@ public class FechterWerkzeug
 
 	private void registriereMeldenButton()
 	{
-		_ui._meldenButton.setOnAction(new EventHandler<ActionEvent>()
+		_ui._hinzufuegenButton.setOnAction(new EventHandler<ActionEvent>()
 		{
 
 			@Override
@@ -188,7 +188,7 @@ public class FechterWerkzeug
 			public void handle(CellEditEvent<Fechter, String> event)
 			{
 				event.getRowValue().nachnameProperty().set(event.getNewValue());
-				event.getRowValue().nameProperty().set(event.getRowValue().getVorname() + " " + event.getRowValue().getNachname());
+				event.getRowValue().nameProperty().set(event.getRowValue().vornameProperty().get() + " " + event.getRowValue().nachnameProperty().get());
 				_tunier.bearbeitet();
 			}
 		});
@@ -200,7 +200,7 @@ public class FechterWerkzeug
 			{
 
 				event.getRowValue().vornameProperty().set(event.getNewValue());
-				event.getRowValue().nameProperty().set(event.getRowValue().getVorname() + " " + event.getRowValue().getNachname());
+				event.getRowValue().nameProperty().set(event.getRowValue().vornameProperty().get() + " " + event.getRowValue().nachnameProperty().get());
 				_tunier.bearbeitet();
 			}
 		});

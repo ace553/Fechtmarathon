@@ -26,41 +26,7 @@ public class Fechter
 		_name = new SimpleStringProperty(vorname + " " + nachname);
 	}
 
-	public void setzteAnwesend(boolean anwesend)
-	{
-		_anwesend.set(anwesend);
-		;
-	}
 
-	public void setzteGestrichen(boolean gestrichen)
-	{
-		_gestrichen.set(gestrichen);
-	}
-
-	public boolean istAnwesend()
-	{
-		return _anwesend.get();
-	}
-
-	public boolean istGestrichen()
-	{
-		return _gestrichen.get();
-	}
-
-	public String getVorname()
-	{
-		return _vorname.get();
-	}
-
-	public String getNachname()
-	{
-		return _nachname.get();
-	}
-
-	public String getVerein()
-	{
-		return _verein.get();
-	}
 
 	public SimpleStringProperty vornameProperty()
 	{

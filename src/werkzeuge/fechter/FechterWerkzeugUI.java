@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -32,7 +31,7 @@ class FechterWerkzeugUI
 	final TextField _vorname;
 	final TextField _nachname;
 	final TextField _verein;
-	final Button _meldenButton;
+	final Button _hinzufuegenButton;
 
 	FechterWerkzeugUI()
 	{
@@ -49,7 +48,7 @@ class FechterWerkzeugUI
 		_vorname = new TextField();
 		_nachname = new TextField();
 		_verein = new TextField();
-		_meldenButton = new Button("Melden");
+		_hinzufuegenButton = new Button("Hinzufügen");
 
 		erstelleTab();
 	}
@@ -109,7 +108,7 @@ class FechterWerkzeugUI
 		final HBox meldeBox = new HBox();
 		meldeBox.setSpacing(3);
 		meldeBox.setPadding(new Insets(10, 0, 10, 10));
-		meldeBox.getChildren().addAll(_vorname, _nachname, _verein, _meldenButton);
+		meldeBox.getChildren().addAll(_vorname, _nachname, _verein, _hinzufuegenButton);
 
 		final VBox vbox = new VBox();
 		vbox.setSpacing(0);
