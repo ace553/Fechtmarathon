@@ -2,6 +2,8 @@ package werkzeuge.gruppen;
 
 import fechten.Fechter;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -46,6 +48,21 @@ public class GruppenTable extends VBox
 		verein.setCellValueFactory(new PropertyValueFactory<Fechter, String>("verein"));
 		verein.setPrefWidth(70);
 		_table.getColumns().addAll(name, verein);
+		registriereNameChange();
+	}
+	
+	private void registriereNameChange()
+	{
+		_titProp.addListener(new ChangeListener<String>()
+		{
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
+			{
+				
+				_title.setText(newValue);
+			}
+		});
 	}
 
 	public TableView<Fechter> getTable()
@@ -57,10 +74,4 @@ public class GruppenTable extends VBox
 	{
 		return _closeButton;
 	}
-
-	public void updateTitle()
-	{
-		_title.setText(_titProp.get());
-	}
-
 }

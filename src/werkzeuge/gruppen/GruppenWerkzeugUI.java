@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
 class GruppenWerkzeugUI
 {
 	final Tab _tab;
-	final GruppenTable _fechterTable;
+	final GruppenTable _keineGruppeTable;
 
 	final List<GruppenTable> _gruppen;
 
@@ -36,7 +36,7 @@ class GruppenWerkzeugUI
 		_nachVereinAufteilen = new Button("Nach Verein aufteilen");
 		_neueGruppeButton = new Button("Neue Gruppe");
 		_pane = new FlowPane();
-		_fechterTable = newTable(new SimpleStringProperty("Keine Gruppe"), null, false);
+		_keineGruppeTable = newTable(new SimpleStringProperty("Keine Gruppe"), null, false);
 		erstelleTab();
 	}
 

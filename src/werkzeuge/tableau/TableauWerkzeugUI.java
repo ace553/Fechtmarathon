@@ -36,7 +36,6 @@ class TableauWerkzeugUI
 		_colNamen = new TableColumn<Teilnehmer, String>("Name");
 
 		_tableauContent = new VBox();
-		setupTableauContent();
 
 		_startContent = new GridPane();
 
@@ -54,6 +53,7 @@ class TableauWerkzeugUI
 		_colID.setCellValueFactory(new PropertyValueFactory<Teilnehmer, Integer>("id"));
 		_colID.setSortable(false);
 
+		_tableauView.getColumns().clear();
 		_tableauView.getColumns().addAll(_colID, _colNamen);
 		_tableauView.getSelectionModel().setCellSelectionEnabled(true);
 		_tableauView.setPrefHeight(10000);
@@ -82,6 +82,7 @@ class TableauWerkzeugUI
 
 	void startTunier()
 	{
+		setupTableauContent();
 		_tab.setContent(_tableauContent);
 	}
 

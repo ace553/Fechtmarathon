@@ -17,7 +17,7 @@ public class ErgebnisTest
 	public void testKonstruktor()
 	{
 		Ergebnis e = new Ergebnis(ErgebnisStatus.AUSSTEHEND, 5, tablo);
-		assertEquals(tablo, e.getTablo());
+		assertEquals(tablo, e.getTableau());
 		assertEquals(0, e.getTreffer());
 		assertFalse(e.hatGewonnen());
 		assertEquals(ErgebnisStatus.AUSSTEHEND, e.getZustand());
@@ -25,7 +25,7 @@ public class ErgebnisTest
 
 		e = new Ergebnis(ErgebnisStatus.UNGUELTIG, 5, null);
 
-		assertEquals(null, e.getTablo());
+		assertEquals(null, e.getTableau());
 		assertEquals(0, e.getTreffer());
 		assertFalse(e.hatGewonnen());
 		assertEquals(ErgebnisStatus.UNGUELTIG, e.getZustand());

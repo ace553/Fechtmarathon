@@ -1,6 +1,8 @@
 package werkzeuge.stage;
 
 import fechten.Tunier;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import service.TunierService;
@@ -36,6 +38,7 @@ public class StageWerkzeug
 		_tabmenuWerkzeug.setupTabs(_tableauWerkzeug.getTab(), _fechterWerkzeug.getTab(), _gruppenWerkzeug.getTab());
 		_ui.setupStage(_menuBarWerkzeug.getMenu(), _tabmenuWerkzeug.getTabPane());
 
+		registriereGespeichert();
 		registriereMenubarWerkzeug();
 	}
 
@@ -50,6 +53,25 @@ public class StageWerkzeug
 				if (event.getSource().equals("Loeschen"))
 				{
 					_fechterWerkzeug.loescheAusgewaehlteFechter();
+				}
+			}
+		});
+	}
+	
+	private void registriereGespeichert()
+	{
+		_tunier.propertyGespeichert().addListener( new ChangeListener<Boolean>(){
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+			{
+				if(newValue)
+				{
+					_ui._stage.setTitle("Marathon");
+				}
+				else
+				{
+					_ui._stage.setTitle("* Marathon");
 				}
 			}
 		});

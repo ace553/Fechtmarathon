@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import fechten.TunierStatus;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -70,7 +73,7 @@ public class TableauWerkzeug
 						if (result.isPresent() && result.get() == ButtonType.OK)
 						{
 							_tunier.streicheNichtAnwesendeFechter();
-							starteTunier();
+							_tunier.starte();
 						}
 					}
 				} else
@@ -86,12 +89,29 @@ public class TableauWerkzeug
 		});
 	}
 
+	private void registriereTunierStatus()
+	{
+		_tunier.getStatus().addListener(new ChangeListener<TunierStatus>()
+		{
+
+			@Override
+			public void changed(ObservableValue<? extends TunierStatus> observable, TunierStatus oldValue, TunierStatus newValue)
+			{
+				if(newValue == TunierStatus.GESTARTET)
+				{
+					starteTunier();
+				}
+				if(newValue == TunierStatus.MELDEN)
+				{
+					_ui.startContent();
+				}
+			}
+		});
+	}
 	private void starteTunier()
 	{
 		_ui.startTunier();
-		_tunier.starte();
-
-		for (int i = 0; i < _tunier.getFechter().size(); i++)
+		for (int i = 0; i < _tunier.getTeilnehmer().size(); i++)
 		{
 			TableColumn<Teilnehmer, String> c = new TableColumn<Teilnehmer, String>();
 			c.setText("" + (i + 1));

@@ -1,14 +1,9 @@
 package werkzeuge.fechter;
 
 import fechten.Fechter;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -31,10 +26,10 @@ public class FechterWerkzeug
 
 		_ui = new FechterWerkzeugUI();
 		_ui._table.setItems(_tunier.getFechter());
-		registriereTableChange();
-		registriereMeldenButton();
+
+		registriereHinzufuegenButton();
 		registriereDragAndDropListener();
-		registriereTunierService();
+
 	}
 
 	public Tab getTab()
@@ -50,7 +45,7 @@ public class FechterWerkzeug
 		}
 	}
 
-	private void registriereMeldenButton()
+	private void registriereHinzufuegenButton()
 	{
 		_ui._hinzufuegenButton.setOnAction(new EventHandler<ActionEvent>()
 		{
@@ -59,29 +54,10 @@ public class FechterWerkzeug
 			public void handle(ActionEvent event)
 			{
 				Fechter f = new Fechter(_ui._vorname.getText(), _ui._nachname.getText(), _ui._verein.getText());
-				_tunier.melde(f);
+				_tunier.fuegeHinzu(f);
 				_ui._vorname.clear();
 				_ui._nachname.clear();
 				_ui._verein.clear();
-			}
-		});
-	}
-
-	private void registriereTunierService()
-	{
-		_tunier.addListener(new InvalidationListener()
-		{
-
-			@Override
-			public void invalidated(Observable observable)
-			{
-				if (_tunier.istGespeichert())
-				{
-					_ui._tab.setText("Teilnehmer");
-				} else
-				{
-					_ui._tab.setText("Teilnehmer *");
-				}
 			}
 		});
 	}
@@ -141,7 +117,6 @@ public class FechterWerkzeug
 
 					event.setDropCompleted(true);
 					_ui._table.getSelectionModel().select(dropIndex);
-					_tunier.updateFechter();
 					event.consume();
 				}
 			});
@@ -151,70 +126,4 @@ public class FechterWerkzeug
 
 	}
 
-	private void registriereTableChange()
-	{
-		_tunier.getFechter().addListener(new ListChangeListener<Fechter>()
-		{
-
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends Fechter> pChange)
-			{
-				_tunier.updateFechter();
-			}
-		});
-
-		_ui._colAnwesend.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Fechter, Boolean>>()
-		{
-
-			@Override
-			public void handle(CellEditEvent<Fechter, Boolean> event)
-			{
-				_tunier.bearbeitet();
-			}
-		});
-		_ui._colGestrichen.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Fechter, Boolean>>()
-		{
-
-			@Override
-			public void handle(CellEditEvent<Fechter, Boolean> event)
-			{
-				_tunier.bearbeitet();
-			}
-		});
-		_ui._colNachnamen.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Fechter, String>>()
-		{
-
-			@Override
-			public void handle(CellEditEvent<Fechter, String> event)
-			{
-				event.getRowValue().nachnameProperty().set(event.getNewValue());
-				event.getRowValue().nameProperty().set(event.getRowValue().vornameProperty().get() + " " + event.getRowValue().nachnameProperty().get());
-				_tunier.bearbeitet();
-			}
-		});
-		_ui._colVornamen.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Fechter, String>>()
-		{
-
-			@Override
-			public void handle(CellEditEvent<Fechter, String> event)
-			{
-
-				event.getRowValue().vornameProperty().set(event.getNewValue());
-				event.getRowValue().nameProperty().set(event.getRowValue().vornameProperty().get() + " " + event.getRowValue().nachnameProperty().get());
-				_tunier.bearbeitet();
-			}
-		});
-
-		_ui._colVerein.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Fechter, String>>()
-		{
-
-			@Override
-			public void handle(CellEditEvent<Fechter, String> event)
-			{
-
-				event.getRowValue().vereinProperty().set(event.getNewValue());
-				_tunier.bearbeitet();
-			}
-		});
-	}
 }

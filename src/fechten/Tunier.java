@@ -1,8 +1,6 @@
 package fechten;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -12,11 +10,11 @@ public class Tunier
 
 	private Tableau _tableau;
 
-	private TunierStatus _status;
+	private SimpleObjectProperty<TunierStatus> _status;
 
 	private ObservableList<Fechter> _keineGruppe;
 
-	private List<Gruppe> _gruppen;
+	private ObservableList<Gruppe> _gruppen;
 
 	private static final int MAX_TREFFER = 5;
 
@@ -25,11 +23,11 @@ public class Tunier
 		_fechter = FXCollections.observableArrayList();
 		_keineGruppe = FXCollections.observableArrayList();
 		_tableau = null;
-		_gruppen = new ArrayList<>();
-		_status = TunierStatus.MELDEN;
+		_gruppen = FXCollections.observableArrayList();
+		_status = new SimpleObjectProperty<TunierStatus>(TunierStatus.MELDEN);
 	}
 
-	public List<Gruppe> getGruppen()
+	public ObservableList<Gruppe> getGruppen()
 	{
 		return _gruppen;
 	}
@@ -67,7 +65,16 @@ public class Tunier
 	{
 		for (int i = 0; i < _gruppen.size(); i++)
 		{
-			_gruppen.get(i).nameProperty().set("Gruppe " + (char) ('A' + i));
+			Gruppe g = _gruppen.get(i);
+			g.nameProperty().set("Gruppe " + (char) ('A' + i));
+			for(Fechter f : g.getFechter())
+			{
+				f.gruppeProperty().set((char)('A'+i)+"");
+			}
+		}
+		for(Fechter f : _keineGruppe)
+		{
+			f.gruppeProperty().set("-");
 		}
 	}
 
@@ -84,9 +91,9 @@ public class Tunier
 
 	public void starteTunier()
 	{
-		assert _status == TunierStatus.MELDEN : "Das Tunier kann nur aus dem MELDEN Status gestartet werden.";
+		assert _status.get() == TunierStatus.MELDEN : "Das Tunier kann nur aus dem MELDEN Status gestartet werden.";
 
-		_status = TunierStatus.GESTARTET;
+		_status.set(TunierStatus.GESTARTET);
 
 		_tableau = new Tableau(_fechter.size(), MAX_TREFFER);
 	}
@@ -101,7 +108,7 @@ public class Tunier
 		return _fechter;
 	}
 
-	public TunierStatus getStatus()
+	public SimpleObjectProperty<TunierStatus> getStatus()
 	{
 		return _status;
 	}
@@ -109,5 +116,10 @@ public class Tunier
 	public ObservableList<Fechter> getKeineGruppe()
 	{
 		return _keineGruppe;
+	}
+
+	public void setStatus(TunierStatus s)
+	{
+		_status.set(s);;
 	}
 }

@@ -15,7 +15,7 @@ public class Ergebnis
 
 	private ErgebnisStatus _zustand;
 
-	private Tableau _tablo;
+	private Tableau _tableau;
 
 	public Ergebnis(ErgebnisStatus startzustand, int maxTreffer, Tableau tablo)
 	{
@@ -24,13 +24,13 @@ public class Ergebnis
 		MAX_TREFFER = maxTreffer;
 		_treffer = 0;
 		_gewonnen = false;
-		_tablo = tablo;
+		_tableau = tablo;
 		updateStyled();
 	}
 
-	public Tableau getTablo()
+	public Tableau getTableau()
 	{
-		return _tablo;
+		return _tableau;
 	}
 
 	public ErgebnisStatus getZustand()
@@ -85,6 +85,14 @@ public class Ergebnis
 		}
 		_styled.set(b.toString());
 
+	}
+	
+	public void reset()
+	{
+		_zustand = ErgebnisStatus.AUSSTEHEND;
+		_treffer = 0;
+		_gewonnen = false;
+		updateStyled();
 	}
 
 	@Override

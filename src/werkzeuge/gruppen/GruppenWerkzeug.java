@@ -1,6 +1,7 @@
 package werkzeuge.gruppen;
 
 import fechten.Gruppe;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
@@ -16,14 +17,17 @@ public class GruppenWerkzeug
 		_ui = new GruppenWerkzeugUI();
 		_tunier = tunier;
 
-		_ui._fechterTable.getTable().setItems(_tunier.getKeineGruppe());
-		for (int i = 0; i < 3; i++)
-		{
-			registriereNeueGruppe();
-		}
+		_ui._keineGruppeTable.getTable().setItems(_tunier.getKeineGruppe());
+
 		registriereZufaelligVerteilenButton();
 		registriereNeueGruppeButton();
 		registriereNachVereinVerteilenButton();
+		registriereGruppenChangeEvent();
+
+		for (int i = 0; i < 3; i++)
+		{
+			_tunier.addGruppe();
+		}
 	}
 
 	public Tab getTab()
@@ -43,7 +47,7 @@ public class GruppenWerkzeug
 			}
 		});
 	}
-	
+
 	private void registriereNachVereinVerteilenButton()
 	{
 		_ui._nachVereinAufteilen.setOnAction(new EventHandler<ActionEvent>()
@@ -56,7 +60,7 @@ public class GruppenWerkzeug
 			}
 		});
 	}
-	
+
 	private void registriereNeueGruppeButton()
 	{
 		_ui._neueGruppeButton.setOnAction(new EventHandler<ActionEvent>()
@@ -64,27 +68,41 @@ public class GruppenWerkzeug
 			@Override
 			public void handle(ActionEvent event)
 			{
-				registriereNeueGruppe();
+				_tunier.addGruppe();
 			}
 		});
 	}
-	
-	private void registriereNeueGruppe()
+
+	private void registriereGruppenChangeEvent()
 	{
-		Gruppe g = _tunier.addGruppe();
-		GruppenTable f = _ui.newTable(g.nameProperty(), g.getFechter(), true);
-		f.getCloseButton().setOnAction(new EventHandler<ActionEvent>()
+		_tunier.getGruppen().addListener(new ListChangeListener<Gruppe>()
 		{
 
 			@Override
-			public void handle(ActionEvent event)
+			public void onChanged(ListChangeListener.Change<? extends Gruppe> c)
 			{
-				_tunier.removeGruppe(g);
-				_ui._pane.getChildren().remove(f);
-				_ui._gruppen.remove(f);
-				for (GruppenTable t : _ui._gruppen)
+				c.next();
+				if (c.getAddedSize() > 0)
 				{
-					t.updateTitle();
+					Gruppe g = _tunier.getGruppen().get(_tunier.getGruppen().size() - 1);
+					GruppenTable f = _ui.newTable(g.nameProperty(), g.getFechter(), true);
+					f.getCloseButton().setOnAction(new EventHandler<ActionEvent>()
+					{
+
+						@Override
+						public void handle(ActionEvent event)
+						{
+							if(_tunier.getGruppen().size() > 1)
+							{
+								_tunier.removeGruppe(g);
+							}
+						}
+					});
+				} else if (c.getRemovedSize() > 0)
+				{
+					int f = c.getFrom();
+					_ui._pane.getChildren().remove(f+1);
+					_ui._gruppen.remove(f);
 				}
 			}
 		});

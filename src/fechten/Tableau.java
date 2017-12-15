@@ -74,6 +74,28 @@ public class Tableau
 		update();
 	}
 
+	public void ergebnisUpdaten(int i1, int i2, String erg)
+	{
+		if (erg.equals("-"))
+		{
+			getErgebnis(i1, i2).reset();
+		} else if (erg.equals("X"))
+		{
+			return;
+		} else if (erg.startsWith("V"))
+		{
+			getErgebnis(i1, i2).eintragen(Integer.valueOf(erg.substring(1)), true);
+		} else
+		{
+			getErgebnis(i1, i2).eintragen(Integer.valueOf(erg.substring(1)), false);
+		}
+	}
+
+	public Ergebnis getErgebnis(int f1, int f2)
+	{
+		return _tableau.get(f1).get(f2);
+	}
+
 	public Ergebnis getErgebnis(Teilnehmer f1, Teilnehmer f2)
 	{
 		return _tableau.get(f1.idProperty().get() - 1).get(f2.idProperty().get() - 1);

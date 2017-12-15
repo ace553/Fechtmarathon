@@ -24,7 +24,7 @@ public class TableauTest
 		{
 			Fechter f = new Fechter("A", "A", "A");
 			f.anwesendProperty().set(true);
-			t.melde(f);
+			t.fuegeHinzu(f);
 		}
 		t.starte();
 		tableau = tunier.getTableau();

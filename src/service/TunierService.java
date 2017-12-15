@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -15,27 +14,42 @@ import fechten.Fechter;
 import fechten.Gruppe;
 import fechten.Tunier;
 import fechten.TunierStatus;
-import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import werkzeuge.tableau.Teilnehmer;
 
-public class TunierService implements Observable
+public class TunierService
 {
 	private Tunier _tunier;
-	private List<InvalidationListener> _listeners;
+	
+	private ChangeListener<Object> _fechterChanged;
 
 	private ObservableList<Teilnehmer> _teilnehmer;
 
-	private boolean _gespeichert;
-
+	private SimpleBooleanProperty _gespeichert;
+	
 	public TunierService(Tunier t)
 	{
 		_tunier = t;
-		_listeners = new ArrayList<>();
-		_gespeichert = true;
+		_gespeichert = new SimpleBooleanProperty(true);
 		_teilnehmer = FXCollections.observableArrayList();
+		_fechterChanged = new ChangeListener<Object>()
+		{
+
+			@Override
+			public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue)
+			{
+				if(!oldValue.equals(newValue))
+				{
+					_gespeichert.set(false);
+				}
+			}
+		};
 
 	}
 
@@ -49,11 +63,15 @@ public class TunierService implements Observable
 		return _tunier.getFechter();
 	}
 
-	public void melde(Fechter fechter)
+	public void fuegeHinzu(Fechter fechter)
 	{
 		_tunier.melde(fechter);
-		_gespeichert = false;
-		notifyListeners();
+		fechter.nachnameProperty().addListener(_fechterChanged);
+		fechter.vornameProperty().addListener(_fechterChanged);
+		fechter.vereinProperty().addListener(_fechterChanged);
+		fechter.gestrichenProperty().addListener(_fechterChanged);
+		fechter.anwesendProperty().addListener(_fechterChanged);
+		_gespeichert.set(false);
 	}
 
 	public void streicheNichtAnwesendeFechter()
@@ -63,16 +81,7 @@ public class TunierService implements Observable
 			if (!f.anwesendProperty().get())
 				f.gestrichenProperty().set(true);
 		}
-	}
-
-	public boolean istGespeichert()
-	{
-		return _gespeichert;
-	}
-
-	public void updateFechter()
-	{
-		bearbeitet();
+		_gespeichert.set(false);
 	}
 	
 	public void verteileFechterZufaellig()
@@ -95,10 +104,25 @@ public class TunierService implements Observable
 		{
 			_tunier.putFechterInGruppe(_tunier.getKeineGruppe().get(0), _tunier.getGruppen().get(i));
 		}
+		_gespeichert.set(false);
+	}
+	
+	public void resetTunier()
+	{
+
+		_tunier.getFechter().clear();
+		int gSize = _tunier.getGruppen().size();
+		for(int i = 0; i < gSize; i++)
+		{
+			_tunier.removeGruppe(_tunier.getGruppen().get(0));
+		}
+		_tunier.setStatus(TunierStatus.MELDEN);
+		_tunier.getKeineGruppe().clear();
 	}
 
 	public void ladeTunier(File file)
 	{
+		resetTunier();
 		List<String> zeilen = null;
 		try
 		{
@@ -108,45 +132,74 @@ public class TunierService implements Observable
 			e.printStackTrace();
 		}
 
-		_tunier.getFechter().clear();
-
+		int id = 0;
+		int status = 0;
+		Gruppe gruppe = null;
+		
 		for (String zeile : zeilen)
 		{
-			String[] parts = zeile.replace("\n", "").split(";");
-			if (parts.length != 5)
+			if(zeile.startsWith("#KeineGruppe"))
 			{
-				return;
+				continue;
 			}
-			Fechter f = new Fechter(parts[0], parts[1], parts[2]);
-			f.anwesendProperty().set(parts[3].equals("true"));
-			f.gestrichenProperty().set(parts[4].equals("true"));
-			_tunier.melde(f);
+			if(zeile.startsWith("#Gruppe"))
+			{
+				status = 1;
+				gruppe = _tunier.addGruppe();
+				continue;
+			}
+			if(zeile.startsWith("#Tableau"))
+			{
+				status = 2;
+				continue;
+			}
+			
+			switch(status)
+			{
+				case 0:
+				{
+					Fechter f = ladeFechter(zeile);
+					fuegeHinzu(f);
+					break;
+				}
+				case 1:
+				{
+					Fechter f = ladeFechter(zeile);
+					fuegeHinzu(f);
+					_tunier.putFechterInGruppe(f, gruppe);
+					break;
+				}
+				case 2:
+				{
+					if(_tunier.getStatus().get() == TunierStatus.MELDEN)
+					{
+						starte();
+					}	
+					String[] parts = zeile.split(";");
+					for(int i = 0; i < parts.length; i++)
+					{
+						_tunier.getTableau().ergebnisUpdaten(id, i, parts[i]);
+					}
+					id++;
+				}
+			}
 		}
-		_gespeichert = true;
-		notifyListeners();
-	}
-
-	public void speichern2(File file)
-	{
-
-		PrintWriter writer = null;
-		try
-		{
-			writer = new PrintWriter(file);
-		} catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		for (Fechter f : _tunier.getFechter())
-		{
-			filePrintFechter(writer, f);
-		}
-		writer.close();
-		_gespeichert = true;
-		notifyListeners();
+		
+		_gespeichert.set(true);
 	}
 	
-	private void filePrintFechter(PrintWriter writer, Fechter f)
+
+	
+	private Fechter ladeFechter(String zeile)
+	{
+		String[] parts = zeile.split(";");
+		Fechter f = new Fechter(parts[0], parts[1], parts[2]);
+		f.anwesendProperty().set(parts[3].equals("true"));
+		f.gestrichenProperty().set(parts[4].equals("true"));
+		return f;
+	}
+	
+	private void speichereFechter(PrintWriter writer, Fechter f)
 	{
 		writer.print(f.vornameProperty().get() + ";" + f.nachnameProperty().get() + ";" + f.vereinProperty().get() + ";" + f.anwesendProperty().get() + ";" + f.gestrichenProperty().get() + "\n");
 		
@@ -162,27 +215,25 @@ public class TunierService implements Observable
 		{
 			e.printStackTrace();
 		}
-		
-		writer.println(_tunier.getStatus());
-		
-		writer.println("keine Gruppe");
+		writer.println("#KeineGruppe");
 		for(Fechter f: _tunier.getKeineGruppe())
 		{
-			filePrintFechter(writer, f);
+			speichereFechter(writer, f);
 		}
 		
 		
 		for(Gruppe g : _tunier.getGruppen())
 		{
-			writer.println(g.nameProperty().get());
+			writer.println("#Gruppe");
 			for(Fechter f: g.getFechter())
 			{
-				filePrintFechter(writer, f);
+				speichereFechter(writer, f);
 			}
 		}
 		
-		if(_tunier.getStatus() == TunierStatus.GESTARTET)
+		if(_tunier.getStatus().get() == TunierStatus.GESTARTET)
 		{
+			writer.println("#Tableau");
 			for(List<Ergebnis> ergebnisse: _tunier.getTableau().getTableau())
 			{
 				writer.print(ergebnisse.get(0));
@@ -195,11 +246,10 @@ public class TunierService implements Observable
 		}
 		
 		writer.close();
-		_gespeichert = true;
-		notifyListeners();
+		_gespeichert.set(true);
 	}
 
-	public TunierStatus getStatus()
+	public SimpleObjectProperty<TunierStatus> getStatus()
 	{
 		return _tunier.getStatus();
 	}
@@ -207,6 +257,7 @@ public class TunierService implements Observable
 	public void starte()
 	{
 		_tunier.starteTunier();
+		_teilnehmer.clear();
 
 		for (int i = 0; i < _tunier.getFechter().size(); i++)
 		{
@@ -215,40 +266,13 @@ public class TunierService implements Observable
 				_teilnehmer.add(new Teilnehmer(_tunier.getFechter().get(i), _tunier.getTableau()));
 			}
 		}
-		notifyListeners();
+		_gespeichert.set(false);
 	}
 
-	public void bearbeitet()
-	{
-		_gespeichert = false;
-		notifyListeners();
-	}
-
-	public void notifyListeners()
-	{
-		for (InvalidationListener l : _listeners)
-		{
-			l.invalidated(this);
-		}
-	}
-
-	@Override
-	public void addListener(InvalidationListener listener)
-	{
-		_listeners.add(listener);
-	}
-
-	@Override
-	public void removeListener(InvalidationListener listener)
-	{
-		_listeners.remove(listener);
-
-	}
 
 	public void loesche(Fechter f)
 	{
 		_tunier.loesche(f);
-		notifyListeners();
 	}
 
 	public boolean alleFechterAnwesendOderGestrichen()
@@ -265,11 +289,13 @@ public class TunierService implements Observable
 
 	public Gruppe addGruppe()
 	{
+		_gespeichert.set(false);
 		return _tunier.addGruppe();
 	}
 
 	public void removeGruppe(Gruppe g)
 	{
+		_gespeichert.set(false);
 		_tunier.removeGruppe(g);
 	}
 
@@ -286,6 +312,7 @@ public class TunierService implements Observable
 		
 		int gSize = _tunier.getGruppen().size();
 		int fSize = _tunier.getKeineGruppe().size();
+
 		int gruppenGroesse = fSize / gSize; 
 		int nochZuVerteilen =  fSize % gSize;
 
@@ -315,5 +342,18 @@ public class TunierService implements Observable
 		{
 			_tunier.putFechterInGruppe(_tunier.getKeineGruppe().get(0), _tunier.getGruppen().get(i));
 		}
+		_gespeichert.set(false);
 	}
+
+	public ObservableList<Gruppe> getGruppen()
+	{
+		return _tunier.getGruppen();
+	}
+
+	public SimpleBooleanProperty propertyGespeichert()
+	{
+		return _gespeichert;
+	}
+
+	
 }

@@ -23,7 +23,7 @@ public class StageWerkzeugUI
 		Scene scene = new Scene(box);
 		_stage.setWidth(1050);
 		_stage.setHeight(700);
-		_stage.setTitle("Marathon Tunier Manager");
+		_stage.setTitle("Marathon");
 		//_stage.setMaximized(true);
 
 		_stage.setScene(scene);
